@@ -31,11 +31,13 @@ export const homeDataSchema = z.object({
     surname: nonBlankText.nullable(),
     roles: z.array(roleNameSchema).min(1),
   }),
-  cycle: z.object({
-    id: z.uuid(),
-    label: nonBlankText,
-    departmentName: nonBlankText,
-  }),
+  cycle: z
+    .object({
+      id: z.uuid(),
+      label: nonBlankText,
+      departmentName: nonBlankText,
+    })
+    .nullable(),
   personalVitae: z
     .object({
       facultyCycleRecordId: z.uuid(),

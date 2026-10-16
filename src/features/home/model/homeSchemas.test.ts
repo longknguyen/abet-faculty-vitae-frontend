@@ -21,6 +21,17 @@ describe('homeDataSchema', () => {
     expect(homeDataSchema.parse(validHomeData)).toMatchObject(validHomeData)
   })
 
+  it('accepts an empty home without an active review cycle', () => {
+    const result = homeDataSchema.parse({
+      ...validHomeData,
+      cycle: null,
+      facultyRecords: [],
+      personalVitae: null,
+    })
+
+    expect(result.cycle).toBeNull()
+  })
+
   it('rejects unknown roles instead of trusting unvalidated JSON', () => {
     expect(() =>
       homeDataSchema.parse({

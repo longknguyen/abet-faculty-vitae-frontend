@@ -17,6 +17,10 @@ export function PersonalVitaeSection({ cycle, displayName, personalVitae, surnam
   const hasImportedCv = importedVitae !== undefined
   const previewSections = personalVitae?.previewSections ?? []
   const greetingName = surname ?? displayName
+  const cycleLabel = cycle?.label ?? 'No active review cycle'
+  const cycleSummary = cycle === null
+    ? cycleLabel
+    : `${cycle.label} · ${cycle.departmentName}`
 
   return (
     <section id="my-vitae" aria-labelledby="personal-vitae-title">
@@ -28,7 +32,7 @@ export function PersonalVitaeSection({ cycle, displayName, personalVitae, surnam
           <h1 id="personal-vitae-title" aria-label="Your faculty vitae." className="mt-4 text-5xl font-semibold leading-[0.98] tracking-[-0.065em] sm:text-6xl lg:text-7xl">
             Your faculty<br />vitae.
           </h1>
-          <p className="mt-5 text-base text-slate-500 dark:text-slate-300">{cycle.label} · {cycle.departmentName}</p>
+          <p className="mt-5 text-base text-slate-500 dark:text-slate-300">{cycleSummary}</p>
           {hasImportedCv ? (
             <div className="mt-7 flex flex-wrap items-center gap-4">
               <button type="button" className="primary-button">Continue reviewing <ArrowRight aria-hidden="true" size={17} /></button>
@@ -36,7 +40,7 @@ export function PersonalVitaeSection({ cycle, displayName, personalVitae, surnam
             </div>
           ) : (
             <>
-              <p className="mt-7 max-w-sm text-sm leading-6 text-slate-600 dark:text-slate-300">Import your CV to start your {cycle.label} faculty vitae.</p>
+              <p className="mt-7 max-w-sm text-sm leading-6 text-slate-600 dark:text-slate-300">CV importing will be available when an ABET review cycle is active.</p>
               <button type="button" className="primary-button mt-5" disabled title="CV importing will be connected in a later workflow">Import CV <ArrowUpRight aria-hidden="true" size={17} /></button>
               <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">PDF or Word document</p>
             </>
@@ -44,11 +48,11 @@ export function PersonalVitaeSection({ cycle, displayName, personalVitae, surnam
         </div>
         <div className="relative grid min-h-96 place-items-center px-4 py-6">
           <div className="w-[min(17rem,80vw)] rotate-6">
-            <DocumentPreview cycleLabel={cycle.label} displayName={displayName} previewSections={previewSections} />
+            <DocumentPreview cycleLabel={cycleLabel} displayName={displayName} previewSections={previewSections} />
           </div>
           {importedVitae !== undefined && (
             <span className="absolute bottom-6 left-0 rounded-2xl bg-white px-4 py-3 text-xs shadow-lg dark:bg-[#29262f]">
-              {cycle.label} vitae · {importedVitae.status === 'SUBMITTED' ? 'In review' : importedVitae.status.toLocaleLowerCase()}
+              {cycleLabel} vitae · {importedVitae.status === 'SUBMITTED' ? 'In review' : importedVitae.status.toLocaleLowerCase()}
             </span>
           )}
         </div>
