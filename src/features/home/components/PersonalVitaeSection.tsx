@@ -6,12 +6,11 @@ import { DocumentPreview } from './DocumentPreview'
 interface PersonalVitaeSectionProps {
   cycle: HomeData['cycle']
   displayName: string
-  onOpenUpload: () => void
   personalVitae: HomeData['personalVitae']
   surname: string | null
 }
 
-export function PersonalVitaeSection({ cycle, displayName, onOpenUpload, personalVitae, surname }: PersonalVitaeSectionProps) {
+export function PersonalVitaeSection({ cycle, displayName, personalVitae, surname }: PersonalVitaeSectionProps) {
   const importedVitae = personalVitae !== null && personalVitae.sourceCv !== null
     ? { ...personalVitae, sourceCv: personalVitae.sourceCv }
     : undefined
@@ -38,7 +37,7 @@ export function PersonalVitaeSection({ cycle, displayName, onOpenUpload, persona
           ) : (
             <>
               <p className="mt-7 max-w-sm text-sm leading-6 text-slate-600 dark:text-slate-300">Import your CV to start your {cycle.label} faculty vitae.</p>
-              <button type="button" className="primary-button mt-5" onClick={onOpenUpload}>Import CV <ArrowUpRight aria-hidden="true" size={17} /></button>
+              <button type="button" className="primary-button mt-5" disabled title="CV importing will be connected in a later workflow">Import CV <ArrowUpRight aria-hidden="true" size={17} /></button>
               <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">PDF or Word document</p>
             </>
           )}
@@ -75,7 +74,6 @@ export function PersonalVitaeSection({ cycle, displayName, onOpenUpload, persona
                 <p className="text-xs text-slate-500 dark:text-slate-400">Source CV · Imported</p>
               </div>
             </div>
-            <button type="button" className="text-button mt-2" onClick={onOpenUpload}>Replace source CV <ArrowUpRight aria-hidden="true" size={15} /></button>
           </div>
         </div>
       ) : (

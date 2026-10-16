@@ -132,14 +132,4 @@ export class MockHomeApi implements HomeApi {
   loadHome(): Promise<HomeData> {
     return Promise.resolve(structuredClone(this.data))
   }
-
-  uploadCv(): Promise<HomeData> {
-    return Promise.reject(new Error('The development mock does not simulate a successful upload'))
-  }
-
-  verifyFacultyRecord(): Promise<HomeData> {
-    return Promise.reject(
-      new Error('The development mock does not simulate successful verification'),
-    )
-  }
 }

@@ -25,5 +25,5 @@ export function HomePage() {
     )
   }
 
-  return <HomeExperience data={controller.loadState.data} mutationError={controller.mutation.error} mutationPending={controller.mutation.pending} uploadCv={controller.uploadCv} verifyFacultyRecord={controller.verifyFacultyRecord} />
+  return <HomeExperience data={controller.loadState.data} />
 }

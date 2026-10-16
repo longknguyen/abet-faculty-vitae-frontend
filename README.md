@@ -41,10 +41,8 @@ src/
 Components never own server data. `HomeApi` is the boundary for backend operations, Zod validates all response data at runtime, and the page derives its faculty/admin composition from API-provided roles. The production adapter expects:
 
 - `GET /api/home`
-- `POST /api/v1/faculty-cycle-records/{id}/cv-uploads`
-- `POST /api/v1/faculty-cycle-records/{id}/verification`
 
-These backend endpoints must be implemented before production integration. Mutations send the backend-issued `XSRF-TOKEN` cookie as `X-XSRF-TOKEN`; upload and verification success are never simulated in the development adapter.
+The initial frontend is intentionally read-only. CV importing, review changes and verification will be connected in later workflows.
 
 ## Development scenarios
 
@@ -55,7 +53,7 @@ These backend endpoints must be implemented before production integration. Mutat
 - `/?scenario=admin`
 - `/?scenario=combined`
 
-The mock adapter cannot be enabled in a production build. It deliberately rejects upload and verification mutations so development cannot present fake success.
+The mock adapter cannot be enabled in a production build.
 
 ## Quality checks
 
