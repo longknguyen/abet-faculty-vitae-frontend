@@ -25,5 +25,6 @@ describe('HomeExperience', () => {
     expect(screen.getAllByText(/no active (ABET )?review cycle/i)).not.toHaveLength(0)
     expect(screen.getByText('No vitae awaiting review')).toBeInTheDocument()
     expect(screen.getByText('Showing 0 of 0 faculty')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /theme/i })).not.toBeInTheDocument()
   })
 })
