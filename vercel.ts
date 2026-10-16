@@ -2,7 +2,9 @@ import { routes, type VercelConfig } from '@vercel/config/v1'
 
 function requiredBackendOrigin(value: string | undefined): string {
   if (value === undefined || value.trim() === '') {
-    throw new Error('BACKEND_ORIGIN must be configured in Vercel')
+    throw new Error(
+      'BACKEND_ORIGIN or the legacy VITE_API_BASE_URL must be configured in Vercel',
+    )
   }
 
   const origin = new URL(value)
@@ -20,7 +22,9 @@ function requiredBackendOrigin(value: string | undefined): string {
   return origin.origin
 }
 
-const backendOrigin = requiredBackendOrigin(process.env.BACKEND_ORIGIN)
+const backendOrigin = requiredBackendOrigin(
+  process.env.BACKEND_ORIGIN ?? process.env.VITE_API_BASE_URL,
+)
 
 export const config: VercelConfig = {
   rewrites: [

@@ -4,19 +4,21 @@ const XSRF_COOKIE_NAME = 'XSRF-TOKEN'
 const XSRF_HEADER_NAME = 'X-XSRF-TOKEN'
 
 function configuredApiBaseUrl(): URL {
-  const configuredValue = import.meta.env.VITE_API_BASE_URL?.trim()
+  const configuredValue = import.meta.env.DEV
+    ? import.meta.env.VITE_API_BASE_URL?.trim()
+    : undefined
   const fallbackOrigin = globalThis.location.origin
   const baseUrl = new URL(configuredValue === '' ? fallbackOrigin : configuredValue ?? fallbackOrigin)
 
   if (baseUrl.username !== '' || baseUrl.password !== '') {
-    throw new Error('VITE_API_BASE_URL must not contain credentials')
+    throw new Error('The API base URL must not contain credentials')
   }
 
   const isLocalDevelopment =
     import.meta.env.DEV && ['localhost', '127.0.0.1'].includes(baseUrl.hostname)
 
   if (baseUrl.protocol !== 'https:' && !(isLocalDevelopment && baseUrl.protocol === 'http:')) {
-    throw new Error('VITE_API_BASE_URL must use HTTPS outside local development')
+    throw new Error('The API base URL must use HTTPS outside local development')
   }
 
   return baseUrl
