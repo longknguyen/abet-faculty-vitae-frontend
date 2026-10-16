@@ -32,7 +32,7 @@ function readCookie(name: string): string | undefined {
     ?.slice(prefix.length)
 }
 
-function requestUrl(path: string): URL {
+export function resolveApiUrl(path: string): URL {
   if (!path.startsWith('/')) {
     throw new Error('API request paths must be root-relative')
   }
@@ -55,7 +55,7 @@ export async function apiFetch(path: string, init: RequestInit = {}): Promise<Re
 
   let response: Response
   try {
-    response = await fetch(requestUrl(path), {
+    response = await fetch(resolveApiUrl(path), {
       ...init,
       credentials: 'include',
       headers,

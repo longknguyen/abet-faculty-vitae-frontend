@@ -1,7 +1,7 @@
 import type { HomeApi } from '../api/HomeApi'
 import { homeDataSchema, type HomeData } from '../model/homeSchemas'
 
-type MockScenario = 'admin' | 'combined' | 'first-time' | 'returning'
+export type MockScenario = 'admin' | 'combined' | 'first-time' | 'returning'
 
 const userId = '0199f80f-3bf3-7ed1-b5f8-060591413962'
 const cycleId = '0199f80f-4e52-7785-ad78-da3215e9e746'
@@ -79,7 +79,7 @@ const facultyRecords: HomeData['facultyRecords'] = [
   },
 ]
 
-function fixtureFor(scenario: MockScenario): HomeData {
+export function createHomeFixture(scenario: MockScenario): HomeData {
   if (scenario === 'first-time') {
     return {
       ...returningFaculty,
@@ -126,7 +126,7 @@ export class MockHomeApi implements HomeApi {
   private data: HomeData
 
   constructor(scenario?: string) {
-    this.data = structuredClone(fixtureFor(isMockScenario(scenario) ? scenario : 'returning'))
+    this.data = structuredClone(createHomeFixture(isMockScenario(scenario) ? scenario : 'returning'))
   }
 
   loadHome(): Promise<HomeData> {
