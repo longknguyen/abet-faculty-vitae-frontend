@@ -1,0 +1,11 @@
+minimumReleaseAge: 1440
+minimumReleaseAgeStrict: true
+blockExoticSubdeps: true
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 10080
+strictDepBuilds: true
+engineStrict: true
+saveExact: true
+
+packages:
+  - .
