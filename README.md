@@ -33,7 +33,6 @@ src/
   shared/
     components/         cross-feature UI primitives
     http/               authenticated HTTP boundary
-    theme/              light/dark preference
   styles/               global Tailwind theme and primitives
 ```
 
