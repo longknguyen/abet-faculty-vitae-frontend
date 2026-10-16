@@ -30,7 +30,6 @@ src/
     hooks/              feature orchestration
     model/              runtime schemas and domain logic
     pages/              route-level composition
-    testing/            development-only fixtures
   shared/
     components/         cross-feature UI primitives
     http/               authenticated HTTP boundary
@@ -43,17 +42,6 @@ Components never own server data. `HomeApi` is the boundary for backend operatio
 - `GET /api/home`
 
 The initial frontend is intentionally read-only. CV importing, review changes and verification will be connected in later workflows.
-
-## Development scenarios
-
-`pnpm dev:mock` loads development-only fixtures. Select a view with a query parameter:
-
-- `/?scenario=returning`
-- `/?scenario=first-time`
-- `/?scenario=admin`
-- `/?scenario=combined`
-
-The mock adapter cannot be enabled in a production build.
 
 ## Quality checks
 
