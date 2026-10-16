@@ -40,7 +40,7 @@ src/
 
 Components never own server data. `HomeApi` is the boundary for backend operations, Zod validates all response data at runtime, and the page derives its faculty/admin composition from API-provided roles. The production adapter expects:
 
-- `GET /api/v1/home`
+- `GET /api/home`
 - `POST /api/v1/faculty-cycle-records/{id}/cv-uploads`
 - `POST /api/v1/faculty-cycle-records/{id}/verification`
 

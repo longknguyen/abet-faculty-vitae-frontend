@@ -8,7 +8,7 @@ async function parseHomeData(response: Response): Promise<HomeData> {
 
 export class HttpHomeApi implements HomeApi {
   async loadHome(signal?: AbortSignal): Promise<HomeData> {
-    const response = await apiFetch('/api/v1/home', { signal })
+    const response = await apiFetch('/api/home', { signal })
     return parseHomeData(response)
   }
 
