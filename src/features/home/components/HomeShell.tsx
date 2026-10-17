@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 
-import { ThemeToggle } from '../../../shared/theme/ThemeToggle'
 import type { RoleName } from '../model/homeSchemas'
 
 interface HomeShellProps {
@@ -33,7 +32,6 @@ export function HomeShell({ children, displayName, roles }: HomeShellProps) {
             {isAdmin && <a href="#faculty">Faculty</a>}
           </nav>
           <div className="flex items-center gap-3 text-sm">
-            <ThemeToggle />
             <span className="hidden sm:inline">{displayName}</span>
             <span className="grid size-9 place-items-center rounded-full bg-blue-50 text-xs font-semibold text-blue-700 dark:bg-blue-950 dark:text-blue-200" aria-hidden="true">
               {initials(displayName)}

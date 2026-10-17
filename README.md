@@ -33,7 +33,6 @@ src/
   shared/
     components/         cross-feature UI primitives
     http/               authenticated HTTP boundary
-    theme/              light/dark preference
   styles/               global Tailwind theme and primitives
 ```
 
@@ -42,6 +41,25 @@ Components never own server data. `HomeApi` is the boundary for backend operatio
 - `GET /api/home`
 
 The initial frontend is intentionally read-only. CV importing, review changes and verification will be connected in later workflows.
+
+## Deployment
+
+The deployed browser must use the frontend origin for API and NetBadge requests so its secure
+session cookie is first-party. `vercel.ts` proxies only `/api`, `/login/saml2` and `/saml2` to the
+backend; it does not expose a general-purpose proxy.
+
+Configure `BACKEND_ORIGIN` in both the Vercel Preview and Production environments with the Heroku
+application origin, without a trailing slash. Leave `VITE_API_BASE_URL` unset so browser requests
+remain relative to the current Vercel deployment. Changes to Vercel environment variables require
+a new deployment. During migration, an existing `VITE_API_BASE_URL` value is accepted as the
+server-side proxy target, but production browser requests still remain same-origin.
+
+The backend's SAML assertion consumer service must use the stable production frontend origin. The
+identity provider must register that exact callback before the proxy-based login flow can be used:
+
+```text
+https://your-frontend.example.edu/login/saml2/sso/netbadge
+```
 
 ## Quality checks
 

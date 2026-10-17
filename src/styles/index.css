@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --color-vitae-blue: #006cdb;
@@ -8,14 +7,10 @@
 }
 
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
   font-family: var(--font-sans);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-}
-
-:root.dark {
-  color-scheme: dark;
 }
 
 html {

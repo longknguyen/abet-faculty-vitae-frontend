@@ -1,4 +1,4 @@
-import { resolveApiUrl } from '../../../shared/http/apiFetch'
+import { netBadgeLoginUrl } from '../../auth/netBadgeAuthentication'
 import { useHomeController } from '../hooks/useHomeController'
 import { HomeExperience } from './HomeExperience'
 
@@ -18,7 +18,7 @@ export function HomePage() {
           <p className="mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300">{controller.loadState.message}</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <button type="button" className="primary-button" onClick={() => { controller.retry() }}>Try again</button>
-            <a className="text-button" href={resolveApiUrl('/saml2/authenticate/netbadge').toString()}>Sign in with NetBadge</a>
+            <a className="text-button" href={netBadgeLoginUrl()}>Sign in with NetBadge</a>
           </div>
         </section>
       </main>

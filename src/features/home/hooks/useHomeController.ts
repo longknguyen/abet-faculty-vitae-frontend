@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
+import { startNetBadgeAuthentication } from '../../auth/netBadgeAuthentication'
+import { ApiError } from '../../../shared/http/ApiError'
 import { createHomeApi } from '../api/createHomeApi'
 import type { HomeData } from '../model/homeSchemas'
 
@@ -34,6 +36,10 @@ export function useHomeController(): HomeController {
         setLoadState({ data, status: 'ready' })
       })
       .catch((error: unknown) => {
+        if (error instanceof ApiError && error.status === 401) {
+          startNetBadgeAuthentication()
+          return
+        }
         const message = errorMessage(error)
         if (message !== '') {
           setLoadState({ message, status: 'error' })
