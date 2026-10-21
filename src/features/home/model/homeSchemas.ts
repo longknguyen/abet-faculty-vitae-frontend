@@ -80,6 +80,7 @@ export const homeDataSchema = z.object({
       version: z.number().int().nonnegative().nullable(),
     }),
   ),
+    onboardingNeeded: z.boolean(),
 })
 
 export type HomeData = z.infer<typeof homeDataSchema>

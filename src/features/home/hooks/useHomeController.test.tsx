@@ -15,7 +15,8 @@ afterEach(() => {
 describe('useHomeController', () => {
   it('starts NetBadge authentication when the API returns unauthorized', async () => {
     const loadHome = vi.fn().mockRejectedValue(new ApiError('Authentication required', 401))
-    vi.mocked(createHomeApi).mockResolvedValue({ loadHome })
+    vi.mocked(createHomeApi).mockResolvedValue({ loadHome,
+                                                  onboardFaculty: vi.fn()})
     const startAuthentication = vi
       .spyOn(netBadgeAuthentication, 'startNetBadgeAuthentication')
       .mockImplementation(() => undefined)
@@ -30,7 +31,8 @@ describe('useHomeController', () => {
 
   it('shows an error instead of restarting login when access is forbidden', async () => {
     const loadHome = vi.fn().mockRejectedValue(new ApiError('Access denied', 403))
-    vi.mocked(createHomeApi).mockResolvedValue({ loadHome })
+    vi.mocked(createHomeApi).mockResolvedValue({ loadHome,
+                                                  onboardFaculty: vi.fn()})
     const startAuthentication = vi
       .spyOn(netBadgeAuthentication, 'startNetBadgeAuthentication')
       .mockImplementation(() => undefined)

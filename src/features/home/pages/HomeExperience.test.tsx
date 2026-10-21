@@ -14,6 +14,7 @@ const emptyHome: HomeData = {
   cycle: null,
   personalVitae: null,
   facultyRecords: [],
+  onboardingNeeded: false,
 }
 
 describe('HomeExperience', () => {
