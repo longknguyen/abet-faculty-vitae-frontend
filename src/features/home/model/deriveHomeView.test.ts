@@ -15,6 +15,7 @@ const homeData = {
   },
   personalVitae: null,
   facultyRecords: [],
+  onboardingNeeded: false,
 } satisfies HomeData
 
 describe('deriveHomeView', () => {

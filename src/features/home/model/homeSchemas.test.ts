@@ -14,6 +14,7 @@ const validHomeData = {
   },
   personalVitae: null,
   facultyRecords: [],
+  onboardingNeeded: false,
 }
 
 describe('homeDataSchema', () => {
