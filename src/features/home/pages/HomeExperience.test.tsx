@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
 import type { HomeData } from '../model/homeSchemas'
@@ -33,7 +33,7 @@ describe('HomeExperience', () => {
     expect(screen.queryByRole('button', { name: /theme/i })).not.toBeInTheDocument()
   })
 
-  it('shows the onboarding form when onboarding is needed', () => {
+  it('shows the overview before opening the prefilled onboarding form', () => {
     const onboardingHome: HomeData = {
       ...emptyHome,
       currentUser: {
@@ -52,12 +52,18 @@ describe('HomeExperience', () => {
         />,
     )
 
-    expect(
-        screen.getByRole('heading', { name: /your facultyprofile/i }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /your faculty vitae/i })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: /before you import/i })).not.toBeInTheDocument()
 
-    expect(
-        screen.queryByRole('heading', { name: /your faculty vitae/i }),
-    ).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /import cv/i }))
+
+    expect(screen.getByRole('heading', { name: /your faculty profile/i })).toBeInTheDocument()
+    expect(screen.getByLabelText(/given name/i)).toHaveValue('Test')
+    expect(screen.getByLabelText(/family name/i)).toHaveValue('User')
+    expect(screen.getByLabelText(/name shown on your vitae/i)).toHaveValue('Test User')
+
+    fireEvent.click(screen.getByRole('button', { name: /back to overview/i }))
+
+    expect(screen.getByRole('heading', { name: /your faculty vitae/i })).toBeInTheDocument()
   })
 })
