@@ -64,6 +64,14 @@ export async function apiFetch(path: string, init: RequestInit = {}): Promise<Re
       redirect: 'follow',
     })
   } catch (error) {
+    if (
+      typeof error === 'object'
+      && error !== null
+      && 'name' in error
+      && error.name === 'AbortError'
+    ) {
+      throw error
+    }
     throw new ApiError('The server could not be reached.', 0, { cause: error })
   }
 

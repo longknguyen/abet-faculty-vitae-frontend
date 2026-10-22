@@ -32,4 +32,11 @@ describe('apiFetch', () => {
     expect(requestInit?.credentials).toBe('include')
     expect(new Headers(requestInit?.headers).get('X-XSRF-TOKEN')).toBe('csrf-token')
   })
+
+  it('preserves request cancellation instead of reporting a connection error', async () => {
+    const abortError = new DOMException('The request was aborted', 'AbortError')
+    vi.stubGlobal('fetch', vi.fn<typeof fetch>().mockRejectedValue(abortError))
+
+    await expect(apiFetch('/api/v1/test')).rejects.toBe(abortError)
+  })
 })
