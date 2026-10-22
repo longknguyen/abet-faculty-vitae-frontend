@@ -4,6 +4,7 @@ import { startNetBadgeAuthentication } from '../../auth/netBadgeAuthentication'
 import { ApiError } from '../../../shared/http/ApiError'
 import { createHomeApi } from '../api/createHomeApi'
 import type { HomeData } from '../model/homeSchemas'
+import type {FacultyOnboardingRequest} from "../api/HomeApi";
 
 type LoadState =
   | { status: 'error'; message: string }
@@ -13,6 +14,9 @@ type LoadState =
 export interface HomeController {
   loadState: LoadState
   retry: () => void
+  onboardFaculty: (request: FacultyOnboardingRequest) => Promise<void>
+  onboardingSubmitting: boolean
+  onboardingError: string | null
 }
 
 function errorMessage(error: unknown): string {
@@ -24,6 +28,8 @@ function errorMessage(error: unknown): string {
 export function useHomeController(): HomeController {
   const [requestNumber, setRequestNumber] = useState(0)
   const [loadState, setLoadState] = useState<LoadState>({ status: 'loading' })
+  const [onboardingSubmitting, setOnboardingSubmitting] = useState(false)
+  const [onboardingError, setOnboardingError] = useState<string | null>(null)
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -56,5 +62,29 @@ export function useHomeController(): HomeController {
     setRequestNumber((value) => value + 1)
   }, [])
 
-  return { loadState, retry }
+  const onboardFaculty = useCallback(
+      async (request: FacultyOnboardingRequest) => {
+        setOnboardingSubmitting(true)
+        setOnboardingError(null)
+        try
+        {
+          const api = await createHomeApi()
+
+          await api.onboardFaculty(request)
+
+          const data = await api.loadHome()
+          setLoadState({data, status: 'ready'})
+        }
+        catch
+        {
+          setOnboardingError('Could not finish loading your profile. Please try again later',)
+        }
+        finally {
+          setOnboardingSubmitting(false)
+        }
+      },
+      [],
+  )
+
+  return { loadState, retry, onboardFaculty,onboardingSubmitting,onboardingError }
 }

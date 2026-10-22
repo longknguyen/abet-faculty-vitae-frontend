@@ -25,5 +25,11 @@ export function HomePage() {
     )
   }
 
-  return <HomeExperience data={controller.loadState.data} />
+  return( <HomeExperience
+          data={controller.loadState.data}
+          onOnboardFaculty={controller.onboardFaculty}
+          onboardingSubmitting={controller.onboardingSubmitting}
+          onboardingError={controller.onboardingError}
+        />
+  )
 }

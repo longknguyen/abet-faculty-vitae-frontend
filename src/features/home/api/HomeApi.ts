@@ -9,9 +9,9 @@ export interface HomeApi {
 }
 
 export interface FacultyOnboardingRequest {
-  givenName?: string,
+  givenName: string,
   middleName?: string,
-  lastName?: string,
+  familyName: string,
   suffix?: string,
 }
 
