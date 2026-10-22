@@ -13,6 +13,7 @@ export interface FacultyOnboardingRequest {
   middleName?: string,
   familyName: string,
   suffix?: string,
+  displayName?: string,
 }
 
 export interface FacultyOnboardingResponse {
