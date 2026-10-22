@@ -33,15 +33,21 @@ export function useHomeController(): HomeController {
 
   useEffect(() => {
     const abortController = new AbortController()
+    let active = true
 
     void createHomeApi()
       .then((createdApi) => {
         return createdApi.loadHome(abortController.signal)
       })
       .then((data) => {
-        setLoadState({ data, status: 'ready' })
+        if (active) {
+          setLoadState({ data, status: 'ready' })
+        }
       })
       .catch((error: unknown) => {
+        if (!active) {
+          return
+        }
         if (error instanceof ApiError && error.status === 401) {
           startNetBadgeAuthentication()
           return
@@ -53,6 +59,7 @@ export function useHomeController(): HomeController {
       })
 
     return () => {
+      active = false
       abortController.abort()
     }
   }, [requestNumber])

@@ -1,4 +1,5 @@
 import { netBadgeLoginUrl } from '../../auth/netBadgeAuthentication'
+import { HomeLoadingSkeleton } from '../components/HomeLoadingSkeleton'
 import { useHomeController } from '../hooks/useHomeController'
 import { HomeExperience } from './HomeExperience'
 
@@ -6,7 +7,7 @@ export function HomePage() {
   const controller = useHomeController()
 
   if (controller.loadState.status === 'loading') {
-    return <main className="grid min-h-screen place-items-center bg-white px-6 dark:bg-[#16151b]" role="status"><p className="text-sm text-slate-600 dark:text-slate-300">Loading your workspace…</p></main>
+    return <HomeLoadingSkeleton />
   }
 
   if (controller.loadState.status === 'error') {

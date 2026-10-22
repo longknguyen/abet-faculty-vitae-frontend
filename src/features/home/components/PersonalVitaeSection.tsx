@@ -6,11 +6,20 @@ import { DocumentPreview } from './DocumentPreview'
 interface PersonalVitaeSectionProps {
   cycle: HomeData['cycle']
   displayName: string
+  onboardingNeeded: boolean
+  onStartImport: () => void
   personalVitae: HomeData['personalVitae']
   surname: string | null
 }
 
-export function PersonalVitaeSection({ cycle, displayName, personalVitae, surname }: PersonalVitaeSectionProps) {
+export function PersonalVitaeSection({
+  cycle,
+  displayName,
+  onboardingNeeded,
+  onStartImport,
+  personalVitae,
+  surname,
+}: PersonalVitaeSectionProps) {
   const importedVitae = personalVitae !== null && personalVitae.sourceCv !== null
     ? { ...personalVitae, sourceCv: personalVitae.sourceCv }
     : undefined
@@ -40,9 +49,23 @@ export function PersonalVitaeSection({ cycle, displayName, personalVitae, surnam
             </div>
           ) : (
             <>
-              <p className="mt-7 max-w-sm text-sm leading-6 text-slate-600 dark:text-slate-300">CV importing will be available when an ABET review cycle is active.</p>
-              <button type="button" className="primary-button mt-5" disabled title="CV importing will be connected in a later workflow">Import CV <ArrowUpRight aria-hidden="true" size={17} /></button>
-              <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">PDF or Word document</p>
+              <p className="mt-7 max-w-sm text-sm leading-6 text-slate-600 dark:text-slate-300">
+                {onboardingNeeded
+                  ? 'Import your current CV to begin creating your ABET faculty vitae.'
+                  : 'CV importing is not available yet.'}
+              </p>
+              <button
+                type="button"
+                className="primary-button mt-5"
+                disabled={!onboardingNeeded}
+                onClick={onboardingNeeded ? onStartImport : undefined}
+                title={onboardingNeeded ? undefined : 'CV importing is not available yet'}
+              >
+                Import CV
+              </button>
+              {!onboardingNeeded && (
+                <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">PDF or Word document</p>
+              )}
             </>
           )}
         </div>
