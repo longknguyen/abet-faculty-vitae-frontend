@@ -17,6 +17,20 @@ pnpm dev
 
 Copy `.env.example` to `.env.local` only when a local override is needed. All `VITE_*` values are public browser configuration and must never contain credentials or API keys.
 
+### Local authentication
+
+The backend provides an opt-in, loopback-only `dev` profile for testing this frontend without a
+NetBadge round trip. Start the backend from its repository with:
+
+```bash
+./gradlew bootRun --args='--spring.profiles.active=dev'
+```
+
+Then start this frontend with `pnpm dev`. Keep `VITE_API_BASE_URL` empty so requests pass through
+the Vite proxy. This exercises the real API client, runtime response validation, CSRF handling, and
+database-backed onboarding flow; only the institutional login is replaced. See the backend README
+for the `DEV_USER_*` settings used to switch identities and roles.
+
 ## Architecture
 
 The source is organised by feature so domain types, API contracts, orchestration and presentation remain close together:
