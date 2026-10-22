@@ -9,6 +9,7 @@ interface FacultyOnboardingProps {
         middleName?: string
         familyName: string
         suffix?: string
+        displayName?: string
     }) => void
 }
 
@@ -21,6 +22,7 @@ export function FacultyOnboardingForm({
     const [familyName, setFamilyName] = useState('')
     const [suffix, setSuffix] = useState('')
     const [middleName, setMiddleName] = useState('')
+    const [displayName, setDisplayName] = useState('')
 
     function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -30,6 +32,7 @@ export function FacultyOnboardingForm({
             middleName: middleName.trim() || undefined,
             familyName: familyName.trim(),
             suffix: suffix.trim() || undefined,
+            displayName: displayName.trim() || undefined,
         })
     }
 
@@ -119,6 +122,25 @@ const inputClass = 'mt-2 w-full rounded-lg border border-[#24103e30] bg-white px
                             onChange={(event) => {setFamilyName(event.target.value)}}
                             className={inputClass}
                         />
+                    </div>
+
+                    <div>
+                        <label htmlFor="displayName" className="text-sm font-medium">
+                            Display name
+                        </label>
+                        <input
+                            id="displayName"
+                            name="displayName"
+                            autoComplete="name"
+                            maxLength={100}
+                            placeholder="e.g. Dr. Alexandra Morgan"
+                            value={displayName}
+                            onChange={(event) => {setDisplayName(event.target.value)}}
+                            className={inputClass}
+                        />
+                        <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
+                            Optional. This is how your name will appear on your faculty profile.
+                        </p>
                     </div>
 
                     <div>
