@@ -15,11 +15,15 @@ const emptyHome: HomeData = {
   personalVitae: null,
   facultyRecords: [],
   onboardingNeeded: false,
+
 }
 
 describe('HomeExperience', () => {
   it('renders the empty home returned by the API', () => {
-    render(<HomeExperience data={emptyHome} />)
+    render(<HomeExperience data={emptyHome}
+                           onOnboardFaculty={async () => {}}
+                           onboardingSubmitting={false}
+                           onboardingError={null}/>)
 
     expect(screen.getByRole('heading', { name: /your faculty vitae/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /faculty overview/i })).toBeInTheDocument()
@@ -27,5 +31,33 @@ describe('HomeExperience', () => {
     expect(screen.getByText('No vitae awaiting review')).toBeInTheDocument()
     expect(screen.getByText('Showing 0 of 0 faculty')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /theme/i })).not.toBeInTheDocument()
+  })
+
+  it('shows the onboarding form when onboarding is needed', () => {
+    const onboardingHome: HomeData = {
+      ...emptyHome,
+      currentUser: {
+        ...emptyHome.currentUser,
+        roles: ['FACULTY'],
+      },
+      onboardingNeeded: true,
+    }
+
+    render(
+        <HomeExperience
+            data={onboardingHome}
+            onOnboardFaculty={async () => {}}
+            onboardingSubmitting={false}
+            onboardingError={null}
+        />,
+    )
+
+    expect(
+        screen.getByRole('heading', { name: /your facultyprofile/i }),
+    ).toBeInTheDocument()
+
+    expect(
+        screen.queryByRole('heading', { name: /your faculty vitae/i }),
+    ).not.toBeInTheDocument()
   })
 })

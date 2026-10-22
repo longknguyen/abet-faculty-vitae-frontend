@@ -18,7 +18,8 @@ export function deriveHomeView(homeData: HomeData): HomeView {
     return 'ADMIN'
   }
   if (isFaculty) {
-    return homeData.personalVitae?.sourceCv === null || homeData.personalVitae === null
+   // return homeData.personalVitae?.sourceCv === null || homeData.personalVitae === null
+    return homeData.onboardingNeeded
       ? 'FIRST_TIME_FACULTY'
       : 'RETURNING_FACULTY'
   }

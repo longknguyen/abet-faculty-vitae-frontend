@@ -20,6 +20,6 @@ export class HttpHomeApi implements HomeApi {
       signal,
     })
 
-  return await response.json() as Promise<FacultyOnboardingResponse>
+  return await response.json() as FacultyOnboardingResponse
 }
 }
