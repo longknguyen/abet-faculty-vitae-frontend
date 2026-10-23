@@ -1,13 +1,13 @@
 import { netBadgeLoginUrl } from '../../auth/netBadgeAuthentication'
-import { HomeLoadingSkeleton } from '../components/HomeLoadingSkeleton'
+import { VitaeOpeningState } from '../components/VitaeOpeningState'
 import { useHomeController } from '../hooks/useHomeController'
 import { HomeExperience } from './HomeExperience'
 
 export function HomePage() {
   const controller = useHomeController()
 
-  if (controller.loadState.status === 'loading') {
-    return <HomeLoadingSkeleton />
+  if (controller.loadState.status === 'opening') {
+    return <VitaeOpeningState />
   }
 
   if (controller.loadState.status === 'error') {

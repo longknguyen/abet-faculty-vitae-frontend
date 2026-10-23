@@ -1,11 +1,11 @@
 import { renderHook, waitFor } from '@testing-library/react'
+import { act } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { ApiError } from '../../../shared/http/ApiError'
 import * as netBadgeAuthentication from '../../auth/netBadgeAuthentication'
 import { createHomeApi } from '../api/createHomeApi'
 import { useHomeController } from './useHomeController'
-import {act} from "react";
 
 vi.mock('../api/createHomeApi')
 
@@ -27,7 +27,7 @@ describe('useHomeController', () => {
     await waitFor(() => {
       expect(startAuthentication).toHaveBeenCalledOnce()
     })
-    expect(result.current.loadState.status).toBe('loading')
+    expect(result.current.loadState.status).toBe('opening')
   })
 
   it('shows an error instead of restarting login when access is forbidden', async () => {

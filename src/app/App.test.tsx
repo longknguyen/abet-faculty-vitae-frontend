@@ -8,9 +8,9 @@ vi.mock('../features/home/api/createHomeApi', () => ({
 }))
 
 describe('App', () => {
-  it('renders the initial loading state', () => {
+  it('renders a neutral opening state while authentication is unknown', () => {
     render(<App />)
 
-    expect(screen.getByRole('status')).toHaveTextContent('Loading your workspace')
+    expect(screen.getByRole('status')).toHaveTextContent('Opening Vitae')
   })
 })
