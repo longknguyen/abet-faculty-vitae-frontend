@@ -1,4 +1,5 @@
-import { netBadgeLoginUrl } from '../../auth/netBadgeAuthentication'
+import { startNetBadgeAuthentication } from '../../auth/netBadgeAuthentication'
+import { HomeLoadingSkeleton } from '../components/HomeLoadingSkeleton'
 import { VitaeOpeningState } from '../components/VitaeOpeningState'
 import { useHomeController } from '../hooks/useHomeController'
 import { HomeExperience } from './HomeExperience'
@@ -10,6 +11,10 @@ export function HomePage() {
     return <VitaeOpeningState />
   }
 
+  if (controller.loadState.status === 'loading') {
+    return <HomeLoadingSkeleton />
+  }
+
   if (controller.loadState.status === 'error') {
     return (
       <main className="grid min-h-screen place-items-center bg-white px-6 text-slate-950 dark:bg-[#16151b] dark:text-white">
@@ -19,7 +24,7 @@ export function HomePage() {
           <p className="mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300">{controller.loadState.message}</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <button type="button" className="primary-button" onClick={() => { controller.retry() }}>Try again</button>
-            <a className="text-button" href={netBadgeLoginUrl()}>Sign in with NetBadge</a>
+            <button type="button" className="text-button" onClick={startNetBadgeAuthentication}>Sign in with NetBadge</button>
           </div>
         </section>
       </main>

@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { startNetBadgeAuthentication } from '../../auth/netBadgeAuthentication'
+import {
+  rememberWorkspaceLoading,
+  shouldShowWorkspaceLoading,
+  startNetBadgeAuthentication,
+} from '../../auth/netBadgeAuthentication'
 import { ApiError } from '../../../shared/http/ApiError'
 import { createHomeApi } from '../api/createHomeApi'
 import type { FacultyOnboardingRequest } from '../api/HomeApi'
@@ -8,6 +12,7 @@ import type { HomeData } from '../model/homeSchemas'
 
 type LoadState =
   | { status: 'error'; message: string }
+  | { status: 'loading' }
   | { status: 'opening' }
   | { status: 'ready'; data: HomeData }
 
@@ -25,9 +30,13 @@ function errorMessage(error: unknown): string {
     : 'We could not complete that request. No information was changed.'
 }
 
+function initialLoadState(): LoadState {
+  return { status: shouldShowWorkspaceLoading() ? 'loading' : 'opening' }
+}
+
 export function useHomeController(): HomeController {
   const [requestNumber, setRequestNumber] = useState(0)
-  const [loadState, setLoadState] = useState<LoadState>({ status: 'opening' })
+  const [loadState, setLoadState] = useState<LoadState>(initialLoadState)
   const [onboardingSubmitting, setOnboardingSubmitting] = useState(false)
   const [onboardingError, setOnboardingError] = useState<string | null>(null)
 
@@ -41,6 +50,7 @@ export function useHomeController(): HomeController {
       })
       .then((data) => {
         if (active) {
+          rememberWorkspaceLoading()
           setLoadState({ data, status: 'ready' })
         }
       })
@@ -65,7 +75,7 @@ export function useHomeController(): HomeController {
   }, [requestNumber])
 
   const retry = useCallback(() => {
-    setLoadState({ status: 'opening' })
+    setLoadState(initialLoadState())
     setRequestNumber((value) => value + 1)
   }, [])
 

@@ -11,6 +11,7 @@ vi.mock('../api/createHomeApi')
 
 afterEach(() => {
   vi.restoreAllMocks()
+  globalThis.sessionStorage.clear()
 })
 
 describe('useHomeController', () => {
