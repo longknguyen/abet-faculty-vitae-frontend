@@ -16,6 +16,9 @@ const formattingRulesSchema = z.record(z.string(), z.unknown())
 export const reviewCycleSchema = z.object({
   id: z.uuid(),
   label: z.string().trim().min(1).max(50),
+  startDate: z.iso.date().nullable(),
+  endDate: z.iso.date().nullable(),
+  submissionDeadline: z.iso.date().nullable(),
   departmentName: z.string().trim().min(1).max(200),
   revisionNumber: z.number().int().positive(),
   status: reviewCycleStatusSchema,

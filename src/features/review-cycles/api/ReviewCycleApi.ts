@@ -1,15 +1,13 @@
 import type {
   ProvisionResult,
   ReviewCycle,
-  ReviewCycleSection,
 } from '../model/reviewCycleSchemas'
 
 export interface ReviewCycleDraft {
   label: string
-  departmentName: string
-  requiredSections: ReviewCycleSection[]
-  formattingRules: Record<string, unknown>
-  renderingTemplateName: string
+  startDate: string
+  endDate: string
+  submissionDeadline: string | null
 }
 
 export interface ReviewCycleApi {

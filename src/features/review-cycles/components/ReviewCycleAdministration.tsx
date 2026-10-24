@@ -36,9 +36,20 @@ function statusLabel(status: ReviewCycle['status']) {
   return status.charAt(0) + status.slice(1).toLocaleLowerCase()
 }
 
-function publishedDate(value: string | null) {
-  if (value === null) return 'Not published'
-  return new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(new Date(value))
+function dateLabel(value: string | null) {
+  if (value === null) return 'Not set'
+  return new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeZone: 'UTC' })
+    .format(new Date(`${value}T00:00:00Z`))
+}
+
+function reviewPeriod(cycle: ReviewCycle) {
+  if (cycle.startDate === null || cycle.endDate === null) return 'Not set'
+  return `${dateLabel(cycle.startDate)} – ${dateLabel(cycle.endDate)}`
+}
+
+function templateLabel(cycle: ReviewCycle) {
+  const words = cycle.renderingTemplateName.replaceAll(/[-_]+/g, ' ')
+  return words.charAt(0).toLocaleUpperCase() + words.slice(1)
 }
 
 function dialogTitle(panel: Panel, cycle: ReviewCycle | undefined) {
@@ -149,16 +160,16 @@ export function ReviewCycleAdministration() {
               </div>
               <dl className="mt-8 grid gap-6 pb-7 sm:grid-cols-3">
                 <div>
-                  <dt className="text-xs text-slate-500 dark:text-slate-300">Department</dt>
-                  <dd className="mt-2 text-sm leading-6">{currentCycle.departmentName}</dd>
+                  <dt className="text-xs text-slate-500 dark:text-slate-300">Review period</dt>
+                  <dd className="mt-2 text-sm leading-6">{reviewPeriod(currentCycle)}</dd>
                 </div>
                 <div>
-                  <dt className="text-xs text-slate-500 dark:text-slate-300">Published</dt>
-                  <dd className="mt-2 text-sm leading-6">{publishedDate(currentCycle.publishedAt)}</dd>
+                  <dt className="text-xs text-slate-500 dark:text-slate-300">Submission deadline</dt>
+                  <dd className="mt-2 text-sm leading-6">{dateLabel(currentCycle.submissionDeadline)}</dd>
                 </div>
                 <div>
-                  <dt className="text-xs text-slate-500 dark:text-slate-300">Faculty records</dt>
-                  <dd className="mt-2 text-sm leading-6">{currentCycle.provisionedFacultyCount} of {currentCycle.totalFacultyCount} provisioned</dd>
+                  <dt className="text-xs text-slate-500 dark:text-slate-300">ABET template</dt>
+                  <dd className="mt-2 text-sm leading-6">{templateLabel(currentCycle)}</dd>
                 </div>
               </dl>
               <div className="flex flex-wrap items-center justify-between gap-5 border-t border-[#24103e20] pt-3 dark:border-[#eee1ff27]">
@@ -194,7 +205,7 @@ export function ReviewCycleAdministration() {
                 <thead className="hidden text-xs font-normal text-slate-500 sm:table-header-group dark:text-slate-300">
                   <tr>
                     <th scope="col" className="border-b border-[#24103e20] pb-3 pr-4 font-normal dark:border-[#eee1ff27]">Cycle</th>
-                    <th scope="col" className="border-b border-[#24103e20] pb-3 pr-4 font-normal dark:border-[#eee1ff27]">Template</th>
+                    <th scope="col" className="border-b border-[#24103e20] pb-3 pr-4 font-normal dark:border-[#eee1ff27]">Review period</th>
                     <th scope="col" className="border-b border-[#24103e20] pb-3 pr-4 font-normal dark:border-[#eee1ff27]">Status</th>
                     <th scope="col" className="border-b border-[#24103e20] pb-3 text-right font-normal dark:border-[#eee1ff27]">Action</th>
                   </tr>
@@ -203,7 +214,7 @@ export function ReviewCycleAdministration() {
                   {otherCycles.map((cycle) => (
                     <tr key={cycle.id} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-4 gap-y-2 border-b border-[#24103e20] py-5 sm:table-row dark:border-[#eee1ff27]">
                       <td className="block font-semibold sm:table-cell sm:py-5 sm:pr-4">{cycle.label}</td>
-                      <td className="col-start-1 row-start-2 block text-xs text-slate-500 sm:table-cell sm:py-5 sm:pr-4 dark:text-slate-300">{cycle.departmentName} · Revision {cycle.revisionNumber}</td>
+                      <td className="col-start-1 row-start-2 block text-xs text-slate-500 sm:table-cell sm:py-5 sm:pr-4 dark:text-slate-300">{reviewPeriod(cycle)}</td>
                       <td className="col-start-2 row-start-1 block text-right sm:table-cell sm:py-5 sm:pr-4 sm:text-left">
                         <span className={`inline-flex rounded-full px-2.5 py-1 text-xs ${statusStyle[cycle.status]}`}>{statusLabel(cycle.status)}</span>
                       </td>
@@ -270,12 +281,16 @@ export function ReviewCycleAdministration() {
             <span className={`inline-flex rounded-full px-2.5 py-1 text-xs ${statusStyle[selectedCycle.status]}`}>{statusLabel(selectedCycle.status)}</span>
             <dl className="mt-6 grid gap-5">
               <div>
-                <dt className="text-xs text-slate-500 dark:text-slate-300">Department</dt>
-                <dd className="mt-1 text-sm">{selectedCycle.departmentName}</dd>
+                <dt className="text-xs text-slate-500 dark:text-slate-300">Review period</dt>
+                <dd className="mt-1 text-sm">{reviewPeriod(selectedCycle)}</dd>
+              </div>
+              <div>
+                <dt className="text-xs text-slate-500 dark:text-slate-300">Submission deadline</dt>
+                <dd className="mt-1 text-sm">{dateLabel(selectedCycle.submissionDeadline)}</dd>
               </div>
               <div>
                 <dt className="text-xs text-slate-500 dark:text-slate-300">ABET template</dt>
-                <dd className="mt-1 text-sm">{selectedCycle.renderingTemplateName} · {selectedCycle.requiredSections.length} required sections</dd>
+                <dd className="mt-1 text-sm">{templateLabel(selectedCycle)} · {selectedCycle.requiredSections.length} required sections</dd>
               </div>
               <div>
                 <dt className="text-xs text-slate-500 dark:text-slate-300">Faculty records</dt>
@@ -333,7 +348,7 @@ export function ReviewCycleAdministration() {
 
         {panel?.kind === 'template' && selectedCycle !== undefined && (
           <div>
-            <p className="text-sm text-slate-600 dark:text-slate-300">{selectedCycle.departmentName} · {selectedCycle.renderingTemplateName}</p>
+            <p className="text-sm text-slate-600 dark:text-slate-300">{templateLabel(selectedCycle)}</p>
             <ol className="mt-5 list-decimal space-y-3 pl-5 text-sm">
               {selectedCycle.requiredSections.map((section) => <li key={section}>{sectionLabels[section]}</li>)}
             </ol>
