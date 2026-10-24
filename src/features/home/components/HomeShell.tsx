@@ -30,6 +30,7 @@ export function HomeShell({ children, displayName, roles }: HomeShellProps) {
             <a className="font-semibold text-slate-950 dark:text-white" href="#overview">Overview</a>
             {isFaculty && <a href="#my-vitae">My vitae</a>}
             {isAdmin && <a href="#faculty">Faculty</a>}
+            {isAdmin && <a href="#review-cycles">Review cycles</a>}
           </nav>
           <div className="flex items-center gap-3 text-sm">
             <span className="hidden sm:inline">{displayName}</span>

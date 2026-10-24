@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { ReviewCycleAdministration } from '../../review-cycles/components/ReviewCycleAdministration'
 import { AdminOverview } from '../components/AdminOverview'
 import { FacultyOnboardingForm } from '../components/FacultyOnboarding'
 import { FacultyRecordDialog } from '../components/FacultyRecordDialog'
@@ -49,6 +50,7 @@ export function HomeExperience({ data, onOnboardFaculty, onboardingSubmitting, o
           />
         ) : null}
         {showAdmin && <AdminOverview cycle={data.cycle} displayName={data.currentUser.displayName} onSelect={setSelectedFaculty} records={data.facultyRecords} />}
+        {showAdmin && <ReviewCycleAdministration />}
       </main>
       <FacultyRecordDialog onClose={() => { setSelectedFaculty(undefined) }} record={selectedFaculty} />
     </HomeShell>
