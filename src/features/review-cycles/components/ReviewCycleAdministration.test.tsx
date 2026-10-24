@@ -9,9 +9,9 @@ vi.mock('../hooks/useReviewCycleAdministration')
 
 const draft: ReviewCycle = {
   id: '0199f80f-4e52-7785-ad78-da3215e9e746',
-  label: '2026–27',
+  label: '2027–28',
   departmentName: 'Computer Science',
-  revisionNumber: 1,
+  revisionNumber: 2,
   status: 'DRAFT',
   requiredSections: ['PROFILE', 'EDUCATION'],
   formattingRules: { pageLimit: 2 },
@@ -21,7 +21,17 @@ const draft: ReviewCycle = {
   totalFacultyCount: 12,
 }
 
-function controller(cycles: ReviewCycle[] = [draft]) {
+const current: ReviewCycle = {
+  ...draft,
+  id: '0199f80f-4e52-7785-ad78-da3215e9e747',
+  label: '2026–27',
+  revisionNumber: 1,
+  status: 'PUBLISHED',
+  publishedAt: '2026-07-01T12:00:00Z',
+  provisionedFacultyCount: 10,
+}
+
+function controller(cycles: ReviewCycle[] = [current, draft]) {
   return {
     cycles,
     error: null,
@@ -29,9 +39,14 @@ function controller(cycles: ReviewCycle[] = [draft]) {
     pendingAction: null,
     create: vi.fn().mockResolvedValue(true),
     update: vi.fn().mockResolvedValue(true),
-    publish: vi.fn().mockResolvedValue(undefined),
-    retire: vi.fn().mockResolvedValue(undefined),
-    provision: vi.fn().mockResolvedValue(undefined),
+    publish: vi.fn().mockResolvedValue(true),
+    retire: vi.fn().mockResolvedValue(true),
+    provision: vi.fn().mockResolvedValue({
+      reviewCycleId: current.id,
+      createdCount: 2,
+      provisionedFacultyCount: 12,
+      totalFacultyCount: 12,
+    }),
     retry: vi.fn(),
   }
 }
@@ -41,49 +56,66 @@ afterEach(() => {
 })
 
 describe('ReviewCycleAdministration', () => {
-  it('shows cycle status, revision and draft actions', () => {
+  it('separates the current cycle from manageable drafts', () => {
     vi.mocked(useReviewCycleAdministration).mockReturnValue(controller())
 
     render(<ReviewCycleAdministration />)
 
-    expect(screen.getByRole('heading', { name: 'Review cycles' })).toBeInTheDocument()
-    expect(screen.getByText('2026–27')).toBeInTheDocument()
-    expect(screen.getByText(/revision 1/i)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Publish' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Review cycles.' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '2026–27' })).toBeInTheDocument()
+    expect(screen.getByText('10 of 12 provisioned')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Manage 2027–28' })).toBeInTheDocument()
+    expect(screen.getByText(/revision 2/i)).toBeInTheDocument()
   })
 
-  it('submits a validated new draft', async () => {
-    const mockedController = controller([])
+  it('creates a draft using the current template defaults', async () => {
+    const mockedController = controller()
     vi.mocked(useReviewCycleAdministration).mockReturnValue(mockedController)
 
     render(<ReviewCycleAdministration />)
-    fireEvent.click(screen.getByRole('button', { name: 'New draft' }))
-    fireEvent.change(screen.getByLabelText('Cycle label'), { target: { value: '2027–28' } })
-    fireEvent.change(screen.getByLabelText('Department'), { target: { value: 'Computer Science' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Create draft' }))
+    fireEvent.click(screen.getByRole('button', { name: 'New cycle' }))
+    fireEvent.change(screen.getByLabelText('Cycle name'), { target: { value: '2028–29' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Save draft' }))
 
     await waitFor(() => {
       expect(mockedController.create).toHaveBeenCalledWith(expect.objectContaining({
-        label: '2027–28',
+        label: '2028–29',
         departmentName: 'Computer Science',
         renderingTemplateName: 'faculty-vitae',
       }))
     })
+    expect(await screen.findByRole('status')).toHaveTextContent('2028–29 was saved as a draft')
   })
 
   it('does not submit malformed formatting rules', async () => {
-    const mockedController = controller([])
+    const mockedController = controller()
     vi.mocked(useReviewCycleAdministration).mockReturnValue(mockedController)
 
     render(<ReviewCycleAdministration />)
-    fireEvent.click(screen.getByRole('button', { name: 'New draft' }))
-    fireEvent.change(screen.getByLabelText('Cycle label'), { target: { value: '2027–28' } })
-    fireEvent.change(screen.getByLabelText('Department'), { target: { value: 'Computer Science' } })
+    fireEvent.click(screen.getByRole('button', { name: 'New cycle' }))
+    fireEvent.change(screen.getByLabelText('Cycle name'), { target: { value: '2028–29' } })
     fireEvent.change(screen.getByLabelText('Formatting rules'), { target: { value: '{' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Create draft' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Save draft' }))
 
     expect(await screen.findByRole('alert')).toHaveTextContent('valid JSON')
     expect(mockedController.create).not.toHaveBeenCalled()
+  })
+
+  it('requires confirmation before making a draft current', async () => {
+    const mockedController = controller()
+    vi.mocked(useReviewCycleAdministration).mockReturnValue(mockedController)
+
+    render(<ReviewCycleAdministration />)
+    fireEvent.click(screen.getByRole('button', { name: 'Manage 2027–28' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Make current' }))
+
+    expect(screen.getByText(/existing faculty records will stay/i)).toBeInTheDocument()
+    expect(mockedController.publish).not.toHaveBeenCalled()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Make current' }))
+
+    await waitFor(() => {
+      expect(mockedController.publish).toHaveBeenCalledWith(draft.id)
+    })
   })
 })

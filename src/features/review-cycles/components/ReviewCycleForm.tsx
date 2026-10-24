@@ -15,6 +15,7 @@ const sectionOptions: Array<{ value: ReviewCycleSection; label: string }> = [
 
 interface ReviewCycleFormProps {
   cycle?: ReviewCycle
+  templateSource?: ReviewCycle
   submitting: boolean
   onCancel: () => void
   onSubmit: (request: ReviewCycleDraft) => Promise<boolean>
@@ -24,20 +25,22 @@ const inputClass = 'mt-2 w-full rounded-lg border border-[#24103e30] bg-white px
 
 export function ReviewCycleForm({
   cycle,
+  templateSource,
   submitting,
   onCancel,
   onSubmit,
 }: ReviewCycleFormProps) {
+  const source = cycle ?? templateSource
   const [label, setLabel] = useState(cycle?.label ?? '')
-  const [departmentName, setDepartmentName] = useState(cycle?.departmentName ?? '')
+  const [departmentName, setDepartmentName] = useState(source?.departmentName ?? '')
   const [renderingTemplateName, setRenderingTemplateName] = useState(
-    cycle?.renderingTemplateName ?? 'faculty-vitae',
+    source?.renderingTemplateName ?? '',
   )
   const [requiredSections, setRequiredSections] = useState<ReviewCycleSection[]>(
-    cycle?.requiredSections ?? sectionOptions.map((section) => section.value),
+    source?.requiredSections ?? sectionOptions.map((section) => section.value),
   )
   const [formattingRules, setFormattingRules] = useState(
-    JSON.stringify(cycle?.formattingRules ?? {}, null, 2),
+    JSON.stringify(source?.formattingRules ?? {}, null, 2),
   )
   const [formError, setFormError] = useState<string | null>(null)
 
@@ -75,66 +78,89 @@ export function ReviewCycleForm({
       formattingRules: parsedRules as Record<string, unknown>,
     })
     if (!saved) {
-      setFormError('The draft could not be saved. Review the values and try again.')
+      setFormError('The cycle could not be saved. Review the values and try again.')
     }
   }
 
   return (
-    <form className="mt-6 grid gap-5 border-y border-[#24103e20] py-6 dark:border-[#eee1ff27]" onSubmit={(event) => { void handleSubmit(event) }}>
-      <div className="grid gap-5 sm:grid-cols-2">
-        <label className="text-sm font-medium">
-          Cycle label
-          <input className={inputClass} required maxLength={50} value={label} onChange={(event) => { setLabel(event.target.value) }} />
-        </label>
-        <label className="text-sm font-medium">
-          Department
-          <input className={inputClass} required maxLength={200} value={departmentName} onChange={(event) => { setDepartmentName(event.target.value) }} />
-        </label>
-      </div>
-
+    <form className="grid gap-6" onSubmit={(event) => { void handleSubmit(event) }}>
       <label className="text-sm font-medium">
-        Rendering template
-        <input className={inputClass} required maxLength={200} value={renderingTemplateName} onChange={(event) => { setRenderingTemplateName(event.target.value) }} />
+        Cycle name
+        <input
+          className={inputClass}
+          required
+          maxLength={50}
+          placeholder="e.g. 2027–28"
+          autoComplete="off"
+          value={label}
+          onChange={(event) => { setLabel(event.target.value) }}
+        />
       </label>
 
-      <fieldset>
-        <legend className="text-sm font-medium">Required sections</legend>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2">
-          {sectionOptions.map((section) => (
-            <label key={section.value} className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-200">
-              <input
-                type="checkbox"
-                checked={requiredSections.includes(section.value)}
-                onChange={() => { toggleSection(section.value) }}
-              />
-              {section.label}
-            </label>
-          ))}
+      {source !== undefined && (
+        <div className="border-y border-[#24103e20] py-4 dark:border-[#eee1ff27]">
+          <span className="text-xs text-slate-500 dark:text-slate-300">ABET template</span>
+          <p className="mt-1 text-sm font-medium">{source.departmentName} · {source.renderingTemplateName}</p>
         </div>
-      </fieldset>
+      )}
 
-      <div>
-        <label htmlFor="formatting-rules" className="text-sm font-medium">
-          Formatting rules
-        </label>
-        <textarea
-          id="formatting-rules"
-          aria-describedby="formatting-rules-description"
-          className={`${inputClass} min-h-36 font-mono`}
-          spellCheck="false"
-          value={formattingRules}
-          onChange={(event) => { setFormattingRules(event.target.value) }}
-        />
-        <p id="formatting-rules-description" className="mt-2 text-xs font-normal text-slate-500 dark:text-slate-300">
-          Enter a JSON object containing the rules used by the document renderer.
-        </p>
-      </div>
+      <details className="group border-b border-[#24103e20] pb-5 dark:border-[#eee1ff27]" open={source === undefined}>
+        <summary className="cursor-pointer text-sm font-semibold text-blue-700 marker:text-slate-400 dark:text-blue-200">
+          Template settings
+        </summary>
+        <div className="mt-5 grid gap-5">
+          <div className="grid gap-5 sm:grid-cols-2">
+            <label className="text-sm font-medium">
+              Department
+              <input className={inputClass} required maxLength={200} value={departmentName} onChange={(event) => { setDepartmentName(event.target.value) }} />
+            </label>
+            <label className="text-sm font-medium">
+              Rendering template
+              <input className={inputClass} required maxLength={200} value={renderingTemplateName} onChange={(event) => { setRenderingTemplateName(event.target.value) }} />
+            </label>
+          </div>
 
+          <fieldset>
+            <legend className="text-sm font-medium">Required sections</legend>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              {sectionOptions.map((section) => (
+                <label key={section.value} className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-200">
+                  <input
+                    type="checkbox"
+                    checked={requiredSections.includes(section.value)}
+                    onChange={() => { toggleSection(section.value) }}
+                  />
+                  {section.label}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <div>
+            <label htmlFor="formatting-rules" className="text-sm font-medium">
+              Formatting rules
+            </label>
+            <textarea
+              id="formatting-rules"
+              aria-describedby="formatting-rules-description"
+              className={`${inputClass} min-h-28 font-mono`}
+              spellCheck="false"
+              value={formattingRules}
+              onChange={(event) => { setFormattingRules(event.target.value) }}
+            />
+            <p id="formatting-rules-description" className="mt-2 text-xs text-slate-500 dark:text-slate-300">
+              JSON settings passed to the document renderer.
+            </p>
+          </div>
+        </div>
+      </details>
+
+      {cycle === undefined && <p className="text-xs text-slate-500 dark:text-slate-300">New cycles are saved as drafts.</p>}
       {formError !== null && <p role="alert" className="text-sm text-red-600 dark:text-red-300">{formError}</p>}
 
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-5">
         <button type="submit" className="primary-button" disabled={submitting}>
-          {submitting ? 'Saving…' : cycle === undefined ? 'Create draft' : 'Save changes'}
+          {submitting ? 'Saving…' : cycle === undefined ? 'Save draft' : 'Save changes'}
         </button>
         <button type="button" className="text-button" disabled={submitting} onClick={onCancel}>Cancel</button>
       </div>

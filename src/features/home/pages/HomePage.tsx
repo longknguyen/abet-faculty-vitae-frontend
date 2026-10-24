@@ -1,41 +1,15 @@
-import { startNetBadgeAuthentication } from '../../auth/netBadgeAuthentication'
-import { HomeLoadingSkeleton } from '../components/HomeLoadingSkeleton'
-import { VitaeOpeningState } from '../components/VitaeOpeningState'
-import { useHomeController } from '../hooks/useHomeController'
+import { useWorkspace } from '../../../app/workspaceContext'
 import { HomeExperience } from './HomeExperience'
 
 export function HomePage() {
-  const controller = useHomeController()
+  const workspace = useWorkspace()
 
-  if (controller.loadState.status === 'opening') {
-    return <VitaeOpeningState />
-  }
-
-  if (controller.loadState.status === 'loading') {
-    return <HomeLoadingSkeleton />
-  }
-
-  if (controller.loadState.status === 'error') {
-    return (
-      <main className="grid min-h-screen place-items-center bg-white px-6 text-slate-950 dark:bg-[#16151b] dark:text-white">
-        <section className="max-w-md text-center" aria-labelledby="load-error-title">
-          <p className="text-sm font-semibold text-blue-700 dark:text-blue-200">Vitae.</p>
-          <h1 id="load-error-title" className="mt-4 text-3xl font-semibold tracking-tight">Your workspace could not be loaded.</h1>
-          <p className="mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300">{controller.loadState.message}</p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <button type="button" className="primary-button" onClick={() => { controller.retry() }}>Try again</button>
-            <button type="button" className="text-button" onClick={startNetBadgeAuthentication}>Sign in with NetBadge</button>
-          </div>
-        </section>
-      </main>
-    )
-  }
-
-  return( <HomeExperience
-          data={controller.loadState.data}
-          onOnboardFaculty={controller.onboardFaculty}
-          onboardingSubmitting={controller.onboardingSubmitting}
-          onboardingError={controller.onboardingError}
-        />
+  return (
+    <HomeExperience
+      data={workspace.data}
+      onOnboardFaculty={workspace.onOnboardFaculty}
+      onboardingSubmitting={workspace.onboardingSubmitting}
+      onboardingError={workspace.onboardingError}
+    />
   )
 }
