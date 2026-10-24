@@ -11,6 +11,9 @@ vi.mock('../api/createReviewCycleApi')
 const cycle: ReviewCycle = {
   id: '0199f80f-4e52-7785-ad78-da3215e9e746',
   label: '2026–27',
+  startDate: '2026-07-01',
+  endDate: '2027-06-30',
+  submissionDeadline: '2027-03-15',
   departmentName: 'Computer Science',
   revisionNumber: 1,
   status: 'DRAFT',

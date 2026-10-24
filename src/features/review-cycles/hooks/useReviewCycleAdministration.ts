@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { createReviewCycleApi } from '../api/createReviewCycleApi'
 import type { ReviewCycleDraft } from '../api/ReviewCycleApi'
-import type { ReviewCycle } from '../model/reviewCycleSchemas'
+import type { ProvisionResult, ReviewCycle } from '../model/reviewCycleSchemas'
 
 interface ReviewCycleAdministrationState {
   cycles: ReviewCycle[]
@@ -11,9 +11,9 @@ interface ReviewCycleAdministrationState {
   pendingAction: string | null
   create: (request: ReviewCycleDraft) => Promise<boolean>
   update: (id: string, request: ReviewCycleDraft) => Promise<boolean>
-  publish: (id: string) => Promise<void>
-  retire: (id: string) => Promise<void>
-  provision: (id: string) => Promise<void>
+  publish: (id: string) => Promise<boolean>
+  retire: (id: string) => Promise<boolean>
+  provision: (id: string) => Promise<ProvisionResult | null>
   retry: () => void
 }
 
@@ -49,42 +49,57 @@ export function useReviewCycleAdministration(): ReviewCycleAdministrationState {
     return () => { abortController.abort() }
   }, [loadCycles, requestNumber])
 
-  const runMutation = useCallback(async (
+  const runMutation = useCallback(async <Result,>(
     actionKey: string,
-    operation: () => Promise<unknown>,
-  ): Promise<boolean> => {
+    operation: () => Promise<Result>,
+  ): Promise<Result | null> => {
     setPendingAction(actionKey)
     setError(null)
     try {
-      await operation()
+      const result = await operation()
       setCycles(await loadCycles())
-      return true
+      return result
     } catch {
       setError(requestErrorMessage())
-      return false
+      return null
     } finally {
       setPendingAction(null)
     }
   }, [loadCycles])
 
   const create = useCallback(async (request: ReviewCycleDraft) => {
-    return runMutation('create', () => createReviewCycleApi().create(request))
+    return (await runMutation(
+      'create',
+      () => createReviewCycleApi().create(request),
+    )) !== null
   }, [runMutation])
 
   const update = useCallback(async (id: string, request: ReviewCycleDraft) => {
-    return runMutation(`update:${id}`, () => createReviewCycleApi().update(id, request))
+    return (await runMutation(
+      `update:${id}`,
+      () => createReviewCycleApi().update(id, request),
+    )) !== null
   }, [runMutation])
 
   const publish = useCallback(async (id: string) => {
-    await runMutation(`publish:${id}`, () => createReviewCycleApi().publish(id))
+    return (await runMutation(
+      `publish:${id}`,
+      () => createReviewCycleApi().publish(id),
+    )) !== null
   }, [runMutation])
 
   const retire = useCallback(async (id: string) => {
-    await runMutation(`retire:${id}`, () => createReviewCycleApi().retire(id))
+    return (await runMutation(
+      `retire:${id}`,
+      () => createReviewCycleApi().retire(id),
+    )) !== null
   }, [runMutation])
 
   const provision = useCallback(async (id: string) => {
-    await runMutation(`provision:${id}`, () => createReviewCycleApi().provision(id))
+    return runMutation(
+      `provision:${id}`,
+      () => createReviewCycleApi().provision(id),
+    )
   }, [runMutation])
 
   const retry = useCallback(() => {

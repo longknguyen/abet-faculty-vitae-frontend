@@ -31,5 +31,6 @@ export const config: VercelConfig = {
     routes.rewrite('/api/:path*', `${backendOrigin}/api/:path*`),
     routes.rewrite('/login/saml2/:path*', `${backendOrigin}/login/saml2/:path*`),
     routes.rewrite('/saml2/:path*', `${backendOrigin}/saml2/:path*`),
+    routes.rewrite('/(.*)', '/index.html'),
   ],
 }

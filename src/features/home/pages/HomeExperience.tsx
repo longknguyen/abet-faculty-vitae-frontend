@@ -1,10 +1,8 @@
 import { useState } from 'react'
 
-import { ReviewCycleAdministration } from '../../review-cycles/components/ReviewCycleAdministration'
 import { AdminOverview } from '../components/AdminOverview'
 import { FacultyOnboardingForm } from '../components/FacultyOnboarding'
 import { FacultyRecordDialog } from '../components/FacultyRecordDialog'
-import { HomeShell } from '../components/HomeShell'
 import { PersonalVitaeSection } from '../components/PersonalVitaeSection'
 import type { FacultyOnboardingRequest } from '../api/HomeApi'
 import { deriveHomeView } from '../model/deriveHomeView'
@@ -26,7 +24,7 @@ export function HomeExperience({ data, onOnboardFaculty, onboardingSubmitting, o
   const showProfileSetup = showPersonal && data.onboardingNeeded && profileSetupOpen
 
   return (
-    <HomeShell displayName={data.currentUser.displayName} roles={data.currentUser.roles}>
+    <>
       <main id="overview">
         {showProfileSetup ? (
           <FacultyOnboardingForm
@@ -50,9 +48,8 @@ export function HomeExperience({ data, onOnboardFaculty, onboardingSubmitting, o
           />
         ) : null}
         {showAdmin && <AdminOverview cycle={data.cycle} displayName={data.currentUser.displayName} onSelect={setSelectedFaculty} records={data.facultyRecords} />}
-        {showAdmin && <ReviewCycleAdministration />}
       </main>
       <FacultyRecordDialog onClose={() => { setSelectedFaculty(undefined) }} record={selectedFaculty} />
-    </HomeShell>
+    </>
   )
 }
