@@ -79,13 +79,13 @@ describe('ReviewCycleAdministration', () => {
     vi.mocked(useReviewCycleAdministration).mockReturnValue(mockedController)
 
     render(<ReviewCycleAdministration />)
-    fireEvent.click(screen.getByRole('button', { name: 'New cycle' }))
-    fireEvent.change(screen.getByLabelText('Cycle name'), { target: { value: '2028–29' } })
-    fireEvent.change(screen.getByLabelText('Start date'), { target: { value: '2028-07-01' } })
-    fireEvent.change(screen.getByLabelText('End date'), { target: { value: '2029-06-30' } })
-    fireEvent.change(screen.getByLabelText(/Submission deadline/), { target: { value: '2029-03-15' } })
+    fireEvent.click(screen.getByRole('button', { name: 'New Cycle' }))
+    fireEvent.change(screen.getByLabelText('Cycle Name'), { target: { value: '2028–29' } })
+    fireEvent.change(screen.getByLabelText('Start Date'), { target: { value: '2028-07-01' } })
+    fireEvent.change(screen.getByLabelText('End Date'), { target: { value: '2029-06-30' } })
+    fireEvent.change(screen.getByLabelText(/Submission Deadline/), { target: { value: '2029-03-15' } })
     expect(screen.queryByLabelText('Department')).not.toBeInTheDocument()
-    const form = screen.getByLabelText('Cycle name').closest('form')
+    const form = screen.getByLabelText('Cycle Name').closest('form')
     if (form === null) throw new Error('Expected the new-cycle form')
     fireEvent.submit(form)
 
@@ -105,12 +105,12 @@ describe('ReviewCycleAdministration', () => {
     vi.mocked(useReviewCycleAdministration).mockReturnValue(mockedController)
 
     render(<ReviewCycleAdministration />)
-    fireEvent.click(screen.getByRole('button', { name: 'New cycle' }))
-    fireEvent.change(screen.getByLabelText('Cycle name'), { target: { value: '2028–29' } })
-    fireEvent.change(screen.getByLabelText('Start date'), { target: { value: '2028-07-01' } })
-    fireEvent.change(screen.getByLabelText('End date'), { target: { value: '2029-06-30' } })
-    fireEvent.change(screen.getByLabelText(/Submission deadline/), { target: { value: '2029-07-01' } })
-    const form = screen.getByLabelText('Cycle name').closest('form')
+    fireEvent.click(screen.getByRole('button', { name: 'New Cycle' }))
+    fireEvent.change(screen.getByLabelText('Cycle Name'), { target: { value: '2028–29' } })
+    fireEvent.change(screen.getByLabelText('Start Date'), { target: { value: '2028-07-01' } })
+    fireEvent.change(screen.getByLabelText('End Date'), { target: { value: '2029-06-30' } })
+    fireEvent.change(screen.getByLabelText(/Submission Deadline/), { target: { value: '2029-07-01' } })
+    const form = screen.getByLabelText('Cycle Name').closest('form')
     if (form === null) throw new Error('Expected the new-cycle form')
     fireEvent.submit(form)
 
@@ -124,12 +124,12 @@ describe('ReviewCycleAdministration', () => {
 
     render(<ReviewCycleAdministration />)
     fireEvent.click(screen.getByRole('button', { name: 'Manage 2027–28' }))
-    fireEvent.click(screen.getByRole('button', { name: 'Make current' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Make Current' }))
 
     expect(screen.getByText(/existing faculty records will stay/i)).toBeInTheDocument()
     expect(mockedController.publish).not.toHaveBeenCalled()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Make current' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Make Current' }))
 
     await waitFor(() => {
       expect(mockedController.publish).toHaveBeenCalledWith(draft.id)

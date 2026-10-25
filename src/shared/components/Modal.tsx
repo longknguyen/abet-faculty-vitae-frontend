@@ -40,7 +40,7 @@ export function Modal({ children, onClose, open, title }: ModalProps) {
       <div className="p-6 sm:p-8">
         <header className="mb-6 flex items-center justify-between gap-4">
           <h2 id={titleId} className="text-2xl font-semibold tracking-tight">{title}</h2>
-          <button type="button" className="grid size-11 place-items-center rounded-full bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950 dark:text-blue-200" onClick={onClose} aria-label="Close dialog">
+          <button type="button" className="grid size-11 place-items-center rounded-full bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950 dark:text-blue-200" onClick={onClose} aria-label="Close Dialog">
             <X aria-hidden="true" size={19} />
           </button>
         </header>

@@ -26,8 +26,8 @@ export function WorkspaceLayout() {
           <h1 id="load-error-title" className="mt-4 text-3xl font-semibold tracking-tight">Your workspace could not be loaded.</h1>
           <p className="mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300">{controller.loadState.message}</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <button type="button" className="primary-button" onClick={() => { controller.retry() }}>Try again</button>
-            <button type="button" className="text-button" onClick={startNetBadgeAuthentication}>Sign in with NetBadge</button>
+            <button type="button" className="primary-button" onClick={() => { controller.retry() }}>Try Again</button>
+            <button type="button" className="text-button" onClick={startNetBadgeAuthentication}>Sign In with NetBadge</button>
           </div>
         </section>
       </main>

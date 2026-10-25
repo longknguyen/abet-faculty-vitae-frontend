@@ -14,7 +14,7 @@ export function DocumentPreview({ cycleLabel, displayName, previewSections }: Do
   const isEmpty = previewSections.length === 0
 
   return (
-    <article className="vitae-document" aria-label="Faculty vitae preview">
+    <article className="vitae-document" aria-label="Faculty Vitae Preview">
       <p className="vitae-document__university">UNIVERSITY OF VIRGINIA</p>
       <p className="vitae-document__name">{displayName}</p>
       <p className="vitae-document__subtitle">Computer Science · Faculty vitae · {cycleLabel}</p>

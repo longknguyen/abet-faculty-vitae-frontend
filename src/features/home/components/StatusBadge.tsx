@@ -6,7 +6,7 @@ interface StatusBadgeProps {
 
 const labels: Record<FacultyCycleStatus, string> = {
   DRAFT: 'Draft',
-  SUBMITTED: 'In review',
+  SUBMITTED: 'In Review',
   VERIFIED: 'Verified',
 }
 
@@ -21,7 +21,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
 
   return (
     <span className={`inline-flex rounded-full px-2.5 py-1 text-xs ${colour}`}>
-      {status === null ? 'Not started' : labels[status]}
+      {status === null ? 'Not Started' : labels[status]}
     </span>
   )
 }

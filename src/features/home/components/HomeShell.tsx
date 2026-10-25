@@ -30,11 +30,11 @@ export function HomeShell({ children, displayName, roles }: HomeShellProps) {
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12">
         <header className="flex min-h-20 flex-wrap items-center justify-between gap-x-8 gap-y-3 border-b border-[#24103e20] py-4 dark:border-[#eee1ff27]">
           <NavLink to="/" className="text-2xl font-bold tracking-[-0.06em]">Vitae.</NavLink>
-          <nav className="order-3 flex w-full flex-wrap items-center gap-6 text-sm text-slate-500 sm:order-none sm:w-auto dark:text-slate-300" aria-label="Primary navigation">
+          <nav className="order-3 flex w-full flex-wrap items-center gap-6 text-sm text-slate-500 sm:order-none sm:w-auto dark:text-slate-300" aria-label="Primary Navigation">
             <NavLink to="/" end className={navigationClass}>Overview</NavLink>
-            {isFaculty && <a href="/#my-vitae">My vitae</a>}
+            {isFaculty && <a href="/#my-vitae">My Vitae</a>}
             {isAdmin && <a href="/#faculty">Faculty</a>}
-            {isAdmin && <NavLink to="/review-cycles" className={navigationClass}>Review cycles</NavLink>}
+            {isAdmin && <NavLink to="/review-cycles" className={navigationClass}>Review Cycles</NavLink>}
           </nav>
           <div className="flex items-center gap-3 text-sm">
             <span className="hidden sm:inline">{displayName}</span>
