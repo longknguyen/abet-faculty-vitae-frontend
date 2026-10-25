@@ -23,8 +23,10 @@ function dateInputClass(value: string) {
 }
 
 function templateLabel(template: Pick<ReviewCycle, 'renderingTemplateName'> | typeof defaultTemplate) {
-  const words = template.renderingTemplateName.replaceAll(/[-_]+/g, ' ')
-  return words.charAt(0).toLocaleUpperCase() + words.slice(1)
+  return template.renderingTemplateName
+    .split(/[-_]+/u)
+    .map((word) => word.charAt(0).toLocaleUpperCase() + word.slice(1))
+    .join(' ')
 }
 
 export function ReviewCycleForm({
@@ -70,7 +72,7 @@ export function ReviewCycleForm({
     <form className="grid gap-6" onSubmit={(event) => { void handleSubmit(event) }}>
       <div className="grid gap-5 sm:grid-cols-2">
         <label className="text-sm font-medium sm:col-span-2">
-          Cycle name
+          Cycle Name
           <input
             className={textInputClass}
             required
@@ -83,7 +85,7 @@ export function ReviewCycleForm({
         </label>
 
         <label className="text-sm font-medium">
-          Start date
+          Start Date
           <input
             type="date"
             className={dateInputClass(startDate)}
@@ -94,7 +96,7 @@ export function ReviewCycleForm({
         </label>
 
         <label className="text-sm font-medium">
-          End date
+          End Date
           <input
             type="date"
             className={dateInputClass(endDate)}
@@ -106,7 +108,7 @@ export function ReviewCycleForm({
         </label>
 
         <label className="text-sm font-medium sm:col-span-2">
-          Submission deadline <span className="text-xs font-normal text-slate-500 dark:text-slate-300">Optional</span>
+          Submission Deadline <span className="text-xs font-normal text-slate-500 dark:text-slate-300">Optional</span>
           <input
             type="date"
             className={dateInputClass(submissionDeadline)}
@@ -120,7 +122,7 @@ export function ReviewCycleForm({
       </div>
 
       <div className="border-y border-[#24103e20] py-4 dark:border-[#eee1ff27]">
-        <span className="text-xs text-slate-500 dark:text-slate-300">ABET template</span>
+        <span className="text-xs text-slate-500 dark:text-slate-300">ABET Template</span>
         <p className="mt-1 text-sm font-medium">{templateLabel(template)}</p>
       </div>
 
@@ -129,7 +131,7 @@ export function ReviewCycleForm({
 
       <div className="flex flex-wrap gap-5">
         <button type="submit" className="primary-button" disabled={submitting}>
-          {submitting ? 'Saving…' : cycle === undefined ? 'Save draft' : 'Save changes'}
+          {submitting ? 'Saving…' : cycle === undefined ? 'Save Draft' : 'Save Changes'}
         </button>
         <button type="button" className="text-button" disabled={submitting} onClick={onCancel}>Cancel</button>
       </div>

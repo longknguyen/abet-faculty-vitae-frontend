@@ -44,8 +44,8 @@ export function PersonalVitaeSection({
           <p className="mt-5 text-base text-slate-500 dark:text-slate-300">{cycleSummary}</p>
           {hasImportedCv ? (
             <div className="mt-7 flex flex-wrap items-center gap-4">
-              <button type="button" className="primary-button">Continue reviewing <ArrowRight aria-hidden="true" size={17} /></button>
-              <button type="button" className="text-button">Preview vitae <ArrowUpRight aria-hidden="true" size={16} /></button>
+              <button type="button" className="primary-button">Continue Reviewing <ArrowRight aria-hidden="true" size={17} /></button>
+              <button type="button" className="text-button">Preview Vitae <ArrowUpRight aria-hidden="true" size={16} /></button>
             </div>
           ) : (
             <>
@@ -83,7 +83,7 @@ export function PersonalVitaeSection({
       {importedVitae !== undefined ? (
         <div className="grid gap-6 border-y border-[#24103e20] py-6 md:grid-cols-2 dark:border-[#eee1ff27]">
           <div>
-            <p className="eyebrow">Your next step</p>
+            <p className="eyebrow">Your Next Step</p>
             {importedVitae.nextReviewItem === null ? (
               <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">No unresolved review items.</p>
             ) : (
@@ -104,11 +104,11 @@ export function PersonalVitaeSection({
           </div>
         </div>
       ) : (
-        <ol className="grid gap-6 border-t border-[#24103e20] py-8 sm:grid-cols-3 dark:border-[#eee1ff27]" aria-label="Creating your vitae">
+        <ol className="grid gap-6 border-t border-[#24103e20] py-8 sm:grid-cols-3 dark:border-[#eee1ff27]" aria-label="Creating Your Vitae">
           {[
-            ['01', 'Import your CV', 'Add your existing document.'],
-            ['02', 'Review your information', 'Check the details and choose what to include.'],
-            ['03', 'Generate your vitae', 'Create your ABET-formatted document.'],
+            ['01', 'Import Your CV', 'Add your existing document.'],
+            ['02', 'Review Your Information', 'Check the details and choose what to include.'],
+            ['03', 'Generate Your Vitae', 'Create your ABET-formatted document.'],
           ].map(([number, title, description]) => (
             <li key={number}>
               <span className="text-xs text-slate-400">{number}</span>

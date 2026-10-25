@@ -72,7 +72,7 @@ export function FacultyOnboardingForm({
     >
       <div>
         <button type="button" className="text-button" onClick={onCancel}>
-          Back to overview
+          Back to Overview
         </button>
         <h1
           id="onboarding-title"
@@ -90,15 +90,15 @@ export function FacultyOnboardingForm({
 
       <div className="self-start border-y border-[#24103e20] py-7 dark:border-[#eee1ff27]">
         <div className="rounded-xl bg-blue-50 px-4 py-3 text-blue-950 dark:bg-blue-950 dark:text-blue-100">
-          <p className="text-sm font-semibold">Information on file</p>
+          <p className="text-sm font-semibold">Information on File</p>
           <p className="mt-1 text-xs leading-5 opacity-80">Review these details and make any changes needed for your faculty vitae.</p>
         </div>
-        <p className="eyebrow mt-6">Profile details</p>
-        <h2 className="mt-2 text-xl font-semibold">Confirm your name</h2>
+        <p className="eyebrow mt-6">Profile Details</p>
+        <h2 className="mt-2 text-xl font-semibold">Confirm Your Name</h2>
 
         <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="givenName" className="text-sm font-medium">Given name *</label>
+            <label htmlFor="givenName" className="text-sm font-medium">Given Name *</label>
             <input
               id="givenName"
               name="givenName"
@@ -112,7 +112,7 @@ export function FacultyOnboardingForm({
           </div>
 
           <div>
-            <label htmlFor="middleName" className="text-sm font-medium">Middle name</label>
+            <label htmlFor="middleName" className="text-sm font-medium">Middle Name</label>
             <input
               id="middleName"
               name="middleName"
@@ -125,7 +125,7 @@ export function FacultyOnboardingForm({
           </div>
 
           <div>
-            <label htmlFor="familyName" className="text-sm font-medium">Family name *</label>
+            <label htmlFor="familyName" className="text-sm font-medium">Family Name *</label>
             <input
               id="familyName"
               name="familyName"
@@ -139,7 +139,7 @@ export function FacultyOnboardingForm({
           </div>
 
           <div>
-            <label htmlFor="displayName" className="text-sm font-medium">Name shown on your vitae</label>
+            <label htmlFor="displayName" className="text-sm font-medium">Name Shown on Your Vitae</label>
             <input
               id="displayName"
               name="displayName"

@@ -20,9 +20,9 @@ const sectionLabels: Record<ReviewCycleSection, string> = {
   EDUCATION: 'Education',
   EXPERIENCE: 'Experience',
   CREDENTIAL: 'Credentials',
-  PROFESSIONAL_DEVELOPMENT: 'Professional development',
+  PROFESSIONAL_DEVELOPMENT: 'Professional Development',
   SERVICE: 'Service',
-  PUBLICATION_PRESENTATION: 'Publications and presentations',
+  PUBLICATION_PRESENTATION: 'Publications and Presentations',
 }
 
 const statusStyle = {
@@ -37,28 +37,30 @@ function statusLabel(status: ReviewCycle['status']) {
 }
 
 function dateLabel(value: string | null) {
-  if (value === null) return 'Not set'
+  if (value === null) return 'Not Set'
   return new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeZone: 'UTC' })
     .format(new Date(`${value}T00:00:00Z`))
 }
 
 function reviewPeriod(cycle: ReviewCycle) {
-  if (cycle.startDate === null || cycle.endDate === null) return 'Not set'
+  if (cycle.startDate === null || cycle.endDate === null) return 'Not Set'
   return `${dateLabel(cycle.startDate)} – ${dateLabel(cycle.endDate)}`
 }
 
 function templateLabel(cycle: ReviewCycle) {
-  const words = cycle.renderingTemplateName.replaceAll(/[-_]+/g, ' ')
-  return words.charAt(0).toLocaleUpperCase() + words.slice(1)
+  return cycle.renderingTemplateName
+    .split(/[-_]+/u)
+    .map((word) => word.charAt(0).toLocaleUpperCase() + word.slice(1))
+    .join(' ')
 }
 
 function dialogTitle(panel: Panel, cycle: ReviewCycle | undefined) {
-  if (panel?.kind === 'create') return 'New cycle'
-  if (panel?.kind === 'edit') return cycle === undefined ? 'Edit cycle' : `Edit ${cycle.label}`
-  if (panel?.kind === 'publish') return cycle === undefined ? 'Make current?' : `Make ${cycle.label} current?`
-  if (panel?.kind === 'retire') return 'Retire current cycle?'
-  if (panel?.kind === 'template') return 'ABET template'
-  return cycle?.label ?? 'Review cycle'
+  if (panel?.kind === 'create') return 'New Cycle'
+  if (panel?.kind === 'edit') return cycle === undefined ? 'Edit Cycle' : `Edit ${cycle.label}`
+  if (panel?.kind === 'publish') return cycle === undefined ? 'Make Current?' : `Make ${cycle.label} Current?`
+  if (panel?.kind === 'retire') return 'Retire Current Cycle?'
+  if (panel?.kind === 'template') return 'ABET Template'
+  return cycle?.label ?? 'Review Cycle'
 }
 
 export function ReviewCycleAdministration() {
@@ -114,14 +116,14 @@ export function ReviewCycleAdministration() {
           onClick={() => { setPanel({ kind: 'create' }) }}
         >
           <Plus aria-hidden="true" size={17} />
-          New cycle
+          New Cycle
         </button>
       </div>
 
       {controller.error !== null && (
         <div className="mb-7 flex flex-wrap items-center justify-between gap-4 border-y border-red-200 py-4 text-sm text-red-700 dark:border-red-900 dark:text-red-200" role="alert">
           <span>{controller.error}</span>
-          <button type="button" className="text-button" onClick={controller.retry}>Try again</button>
+          <button type="button" className="text-button" onClick={controller.retry}>Try Again</button>
         </div>
       )}
 
@@ -139,8 +141,8 @@ export function ReviewCycleAdministration() {
         <>
           {currentCycle === undefined ? (
             <section className="border-y border-[#24103e20] py-9 dark:border-[#eee1ff27]" aria-labelledby="current-cycle-title">
-              <p className="eyebrow">Current cycle</p>
-              <h2 id="current-cycle-title" className="mt-4 text-3xl font-semibold tracking-tight">No current cycle</h2>
+              <p className="eyebrow">Current Cycle</p>
+              <h2 id="current-cycle-title" className="mt-4 text-3xl font-semibold tracking-tight">No Current Cycle</h2>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
                 Create a draft or make an existing draft current when it is ready.
               </p>
@@ -148,27 +150,27 @@ export function ReviewCycleAdministration() {
           ) : (
             <section className="border-y border-[#24103e20] py-7 dark:border-[#eee1ff27]" aria-labelledby="current-cycle-title">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <p className="eyebrow">Current cycle</p>
+                <p className="eyebrow">Current Cycle</p>
                 <span className={`inline-flex rounded-full px-3 py-1 text-xs ${statusStyle.PUBLISHED}`}>Current</span>
               </div>
               <div className="mt-3 flex flex-wrap items-center justify-between gap-5">
                 <h2 id="current-cycle-title" className="text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">{currentCycle.label}</h2>
                 <button type="button" className="text-button" onClick={() => { setPanel({ kind: 'template', cycleId: currentCycle.id }) }}>
-                  View template
+                  View Template
                   <ArrowUpRight aria-hidden="true" size={16} />
                 </button>
               </div>
               <dl className="mt-8 grid gap-6 pb-7 sm:grid-cols-3">
                 <div>
-                  <dt className="text-xs text-slate-500 dark:text-slate-300">Review period</dt>
+                  <dt className="text-xs text-slate-500 dark:text-slate-300">Review Period</dt>
                   <dd className="mt-2 text-sm leading-6">{reviewPeriod(currentCycle)}</dd>
                 </div>
                 <div>
-                  <dt className="text-xs text-slate-500 dark:text-slate-300">Submission deadline</dt>
+                  <dt className="text-xs text-slate-500 dark:text-slate-300">Submission Deadline</dt>
                   <dd className="mt-2 text-sm leading-6">{dateLabel(currentCycle.submissionDeadline)}</dd>
                 </div>
                 <div>
-                  <dt className="text-xs text-slate-500 dark:text-slate-300">ABET template</dt>
+                  <dt className="text-xs text-slate-500 dark:text-slate-300">ABET Template</dt>
                   <dd className="mt-2 text-sm leading-6">{templateLabel(currentCycle)}</dd>
                 </div>
               </dl>
@@ -181,7 +183,7 @@ export function ReviewCycleAdministration() {
                     disabled={actionPending}
                     onClick={() => { void provision(currentCycle) }}
                   >
-                    {controller.pendingAction === `provision:${currentCycle.id}` ? 'Provisioning…' : 'Provision faculty'}
+                    {controller.pendingAction === `provision:${currentCycle.id}` ? 'Provisioning…' : 'Provision Faculty'}
                   </button>
                   <button
                     type="button"
@@ -189,7 +191,7 @@ export function ReviewCycleAdministration() {
                     disabled={actionPending}
                     onClick={() => { setPanel({ kind: 'retire', cycleId: currentCycle.id }) }}
                   >
-                    Retire cycle
+                    Retire Cycle
                   </button>
                 </div>
               </div>
@@ -197,7 +199,7 @@ export function ReviewCycleAdministration() {
           )}
 
           <section className="pt-9" aria-labelledby="other-cycles-title">
-            <h2 id="other-cycles-title" className="text-2xl font-semibold tracking-tight">Other cycles</h2>
+            <h2 id="other-cycles-title" className="text-2xl font-semibold tracking-tight">Other Cycles</h2>
             {otherCycles.length === 0 ? (
               <p className="mt-5 border-b border-[#24103e20] py-6 text-sm text-slate-500 dark:border-[#eee1ff27] dark:text-slate-300">No other review cycles.</p>
             ) : (
@@ -205,7 +207,7 @@ export function ReviewCycleAdministration() {
                 <thead className="hidden text-xs font-normal text-slate-500 sm:table-header-group dark:text-slate-300">
                   <tr>
                     <th scope="col" className="border-b border-[#24103e20] pb-3 pr-4 font-normal dark:border-[#eee1ff27]">Cycle</th>
-                    <th scope="col" className="border-b border-[#24103e20] pb-3 pr-4 font-normal dark:border-[#eee1ff27]">Review period</th>
+                    <th scope="col" className="border-b border-[#24103e20] pb-3 pr-4 font-normal dark:border-[#eee1ff27]">Review Period</th>
                     <th scope="col" className="border-b border-[#24103e20] pb-3 pr-4 font-normal dark:border-[#eee1ff27]">Status</th>
                     <th scope="col" className="border-b border-[#24103e20] pb-3 text-right font-normal dark:border-[#eee1ff27]">Action</th>
                   </tr>
@@ -281,19 +283,19 @@ export function ReviewCycleAdministration() {
             <span className={`inline-flex rounded-full px-2.5 py-1 text-xs ${statusStyle[selectedCycle.status]}`}>{statusLabel(selectedCycle.status)}</span>
             <dl className="mt-6 grid gap-5">
               <div>
-                <dt className="text-xs text-slate-500 dark:text-slate-300">Review period</dt>
+                <dt className="text-xs text-slate-500 dark:text-slate-300">Review Period</dt>
                 <dd className="mt-1 text-sm">{reviewPeriod(selectedCycle)}</dd>
               </div>
               <div>
-                <dt className="text-xs text-slate-500 dark:text-slate-300">Submission deadline</dt>
+                <dt className="text-xs text-slate-500 dark:text-slate-300">Submission Deadline</dt>
                 <dd className="mt-1 text-sm">{dateLabel(selectedCycle.submissionDeadline)}</dd>
               </div>
               <div>
-                <dt className="text-xs text-slate-500 dark:text-slate-300">ABET template</dt>
+                <dt className="text-xs text-slate-500 dark:text-slate-300">ABET Template</dt>
                 <dd className="mt-1 text-sm">{templateLabel(selectedCycle)} · {selectedCycle.requiredSections.length} required sections</dd>
               </div>
               <div>
-                <dt className="text-xs text-slate-500 dark:text-slate-300">Faculty records</dt>
+                <dt className="text-xs text-slate-500 dark:text-slate-300">Faculty Records</dt>
                 <dd className="mt-1 text-sm">{selectedCycle.provisionedFacultyCount} faculty records</dd>
               </div>
             </dl>
@@ -305,11 +307,11 @@ export function ReviewCycleAdministration() {
             <div className="mt-7 flex flex-wrap gap-5">
               {selectedCycle.status === 'DRAFT' && (
                 <>
-                  <button type="button" className="primary-button" onClick={() => { setPanel({ kind: 'publish', cycleId: selectedCycle.id }) }}>Make current</button>
-                  <button type="button" className="text-button" onClick={() => { setPanel({ kind: 'edit', cycleId: selectedCycle.id }) }}>Edit cycle</button>
+                  <button type="button" className="primary-button" onClick={() => { setPanel({ kind: 'publish', cycleId: selectedCycle.id }) }}>Make Current</button>
+                  <button type="button" className="text-button" onClick={() => { setPanel({ kind: 'edit', cycleId: selectedCycle.id }) }}>Edit Cycle</button>
                 </>
               )}
-              <button type="button" className="text-button" onClick={() => { setPanel({ kind: 'template', cycleId: selectedCycle.id }) }}>View template</button>
+              <button type="button" className="text-button" onClick={() => { setPanel({ kind: 'template', cycleId: selectedCycle.id }) }}>View Template</button>
               <button type="button" className="text-button" onClick={closePanel}>Done</button>
             </div>
           </div>
@@ -325,7 +327,7 @@ export function ReviewCycleAdministration() {
             </p>
             <div className="mt-7 flex flex-wrap gap-5">
               <button type="button" className="primary-button" disabled={actionPending} onClick={() => { void publish(selectedCycle) }}>
-                {controller.pendingAction === `publish:${selectedCycle.id}` ? 'Making current…' : 'Make current'}
+                {controller.pendingAction === `publish:${selectedCycle.id}` ? 'Making Current…' : 'Make Current'}
               </button>
               <button type="button" className="text-button" disabled={actionPending} onClick={closePanel}>Cancel</button>
             </div>
@@ -339,7 +341,7 @@ export function ReviewCycleAdministration() {
             </p>
             <div className="mt-7 flex flex-wrap gap-5">
               <button type="button" className="primary-button" disabled={actionPending} onClick={() => { void retire(selectedCycle) }}>
-                {controller.pendingAction === `retire:${selectedCycle.id}` ? 'Retiring…' : 'Retire cycle'}
+                {controller.pendingAction === `retire:${selectedCycle.id}` ? 'Retiring…' : 'Retire Cycle'}
               </button>
               <button type="button" className="text-button" disabled={actionPending} onClick={closePanel}>Cancel</button>
             </div>
