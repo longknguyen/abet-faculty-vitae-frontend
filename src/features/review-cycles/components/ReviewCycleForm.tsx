@@ -15,7 +15,12 @@ const defaultTemplate = {
   renderingTemplateName: 'faculty-vitae',
 } satisfies Pick<ReviewCycle, 'renderingTemplateName'>
 
-const inputClass = 'mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-950 placeholder:text-slate-500 outline-none transition [color-scheme:light] focus:border-blue-600 focus:ring-2 focus:ring-blue-100 dark:border-white/15 dark:bg-[#1c1a22] dark:text-white dark:placeholder:text-white dark:[color-scheme:dark] dark:focus:ring-blue-950'
+const inputClass = 'mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition [color-scheme:light] focus:border-blue-600 focus:ring-2 focus:ring-blue-100 dark:border-white/15 dark:bg-[#1c1a22] dark:[color-scheme:dark] dark:focus:ring-blue-950'
+const textInputClass = `${inputClass} text-slate-950 placeholder:text-slate-500 dark:text-white dark:placeholder:text-slate-400`
+
+function dateInputClass(value: string) {
+  return `${inputClass} ${value === '' ? 'text-slate-500 dark:text-slate-400' : 'text-slate-950 dark:text-white'}`
+}
 
 function templateLabel(template: Pick<ReviewCycle, 'renderingTemplateName'> | typeof defaultTemplate) {
   const words = template.renderingTemplateName.replaceAll(/[-_]+/g, ' ')
@@ -67,7 +72,7 @@ export function ReviewCycleForm({
         <label className="text-sm font-medium sm:col-span-2">
           Cycle name
           <input
-            className={inputClass}
+            className={textInputClass}
             required
             maxLength={50}
             placeholder="e.g. 2027–28"
@@ -81,7 +86,7 @@ export function ReviewCycleForm({
           Start date
           <input
             type="date"
-            className={inputClass}
+            className={dateInputClass(startDate)}
             required
             value={startDate}
             onChange={(event) => { setStartDate(event.target.value) }}
@@ -92,7 +97,7 @@ export function ReviewCycleForm({
           End date
           <input
             type="date"
-            className={inputClass}
+            className={dateInputClass(endDate)}
             required
             min={startDate || undefined}
             value={endDate}
@@ -104,7 +109,7 @@ export function ReviewCycleForm({
           Submission deadline <span className="text-xs font-normal text-slate-500 dark:text-slate-300">Optional</span>
           <input
             type="date"
-            className={inputClass}
+            className={dateInputClass(submissionDeadline)}
             min={startDate || undefined}
             max={endDate || undefined}
             value={submissionDeadline}
