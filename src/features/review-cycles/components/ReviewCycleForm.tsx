@@ -15,7 +15,7 @@ const defaultTemplate = {
   renderingTemplateName: 'faculty-vitae',
 } satisfies Pick<ReviewCycle, 'renderingTemplateName'>
 
-const inputClass = 'mt-2 w-full rounded-lg border border-[#24103e30] bg-white px-4 py-3 text-sm text-[#1c1730] outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100 dark:border-[#eee1ff27] dark:bg-[#1c1a22] dark:text-[#f9f5ff] dark:focus:ring-blue-950'
+const inputClass = 'mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-950 placeholder:text-slate-500 outline-none transition [color-scheme:light] focus:border-blue-600 focus:ring-2 focus:ring-blue-100 dark:border-white/15 dark:bg-[#1c1a22] dark:text-white dark:placeholder:text-white dark:[color-scheme:dark] dark:focus:ring-blue-950'
 
 function templateLabel(template: Pick<ReviewCycle, 'renderingTemplateName'> | typeof defaultTemplate) {
   const words = template.renderingTemplateName.replaceAll(/[-_]+/g, ' ')
