@@ -10,6 +10,8 @@ export function HomePage() {
       onOnboardFaculty={workspace.onOnboardFaculty}
       onboardingSubmitting={workspace.onboardingSubmitting}
       onboardingError={workspace.onboardingError}
+      cvUploadState={workspace.cvUploadState}
+      onUploadCv={workspace.onUploadCv}
     />
   )
 }
