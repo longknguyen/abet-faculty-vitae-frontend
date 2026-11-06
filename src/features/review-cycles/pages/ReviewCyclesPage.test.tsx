@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { useWorkspace } from '../../../app/workspaceContext'
+import type { WorkspaceContext } from '../../../app/workspaceContext'
 import type { HomeData } from '../../home/model/homeSchemas'
 import { ReviewCyclesPage } from './ReviewCyclesPage'
 
@@ -23,12 +24,14 @@ const data: HomeData = {
   onboardingNeeded: false,
 }
 
-function workspace(homeData: HomeData) {
+function workspace(homeData: HomeData): WorkspaceContext {
   return {
     data: homeData,
     onOnboardFaculty: vi.fn(),
     onboardingSubmitting: false,
     onboardingError: null,
+    cvUploadState: { status: 'idle' },
+    onUploadCv: async () => {},
   }
 }
 

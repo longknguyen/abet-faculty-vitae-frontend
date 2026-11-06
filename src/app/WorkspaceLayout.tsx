@@ -43,6 +43,8 @@ export function WorkspaceLayout() {
         onOnboardFaculty: controller.onboardFaculty,
         onboardingSubmitting: controller.onboardingSubmitting,
         onboardingError: controller.onboardingError,
+        cvUploadState: controller.cvUploadState,
+        onUploadCv: controller.uploadCv,
       } satisfies WorkspaceContext} />
     </HomeShell>
   )
