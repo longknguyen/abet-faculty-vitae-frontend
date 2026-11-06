@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest'
 import type { HomeData } from '../model/homeSchemas'
 import { HomeExperience } from './HomeExperience'
 
+const idleUpload = { status: 'idle' } as const
+
 const emptyHome: HomeData = {
   currentUser: {
     id: '0199f80f-3bf3-7ed1-b5f8-060591413962',
@@ -23,7 +25,9 @@ describe('HomeExperience', () => {
     render(<HomeExperience data={emptyHome}
                            onOnboardFaculty={async () => {}}
                            onboardingSubmitting={false}
-                           onboardingError={null}/>)
+                           onboardingError={null}
+                           cvUploadState={idleUpload}
+                           onUploadCv={async () => {}} />)
 
     expect(screen.getByRole('heading', { name: /your faculty vitae/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /faculty overview/i })).toBeInTheDocument()
@@ -49,6 +53,8 @@ describe('HomeExperience', () => {
             onOnboardFaculty={async () => {}}
             onboardingSubmitting={false}
             onboardingError={null}
+            cvUploadState={idleUpload}
+            onUploadCv={async () => {}}
         />,
     )
 
@@ -65,5 +71,33 @@ describe('HomeExperience', () => {
     fireEvent.click(screen.getByRole('button', { name: /back to overview/i }))
 
     expect(screen.getByRole('heading', { name: /your faculty vitae/i })).toBeInTheDocument()
+  })
+
+  it('opens the CV upload form after profile setup is complete', () => {
+    const activeCycleHome: HomeData = {
+      ...emptyHome,
+      currentUser: { ...emptyHome.currentUser, roles: ['FACULTY'] },
+      cycle: {
+        id: '0199f80f-3bf3-7ed1-b5f8-060591413963',
+        label: '2027–28',
+        departmentName: 'Computer Science',
+      },
+    }
+
+    render(
+      <HomeExperience
+        data={activeCycleHome}
+        onOnboardFaculty={async () => {}}
+        onboardingSubmitting={false}
+        onboardingError={null}
+        cvUploadState={idleUpload}
+        onUploadCv={async () => {}}
+      />,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: /import cv/i }))
+
+    expect(screen.getByRole('dialog', { name: 'Import CV' })).toBeInTheDocument()
+    expect(screen.getByLabelText(/choose a file/i)).toHaveAttribute('accept', expect.stringContaining('.docx'))
   })
 })
