@@ -1,7 +1,6 @@
 const MAXIMUM_CV_BYTES = 10 * 1024 * 1024
-const ALLOWED_EXTENSIONS = new Set(['doc', 'docx', 'pdf'])
+const ALLOWED_EXTENSIONS = new Set(['docx', 'pdf'])
 const ALLOWED_MEDIA_TYPES = new Set([
-  'application/msword',
   'application/pdf',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 ])

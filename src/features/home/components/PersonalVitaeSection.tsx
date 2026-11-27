@@ -1,6 +1,7 @@
 import { ArrowRight, ArrowUpRight, FileText } from 'lucide-react'
 
 import type { HomeData } from '../model/homeSchemas'
+import type { CvUploadState } from '../hooks/useHomeController'
 import { DocumentPreview } from './DocumentPreview'
 
 interface PersonalVitaeSectionProps {
@@ -10,6 +11,7 @@ interface PersonalVitaeSectionProps {
   onStartImport: () => void
   personalVitae: HomeData['personalVitae']
   surname: string | null
+  uploadState: CvUploadState
 }
 
 export function PersonalVitaeSection({
@@ -19,6 +21,7 @@ export function PersonalVitaeSection({
   onStartImport,
   personalVitae,
   surname,
+  uploadState,
 }: PersonalVitaeSectionProps) {
   const importedVitae = personalVitae !== null && personalVitae.sourceCv !== null
     ? { ...personalVitae, sourceCv: personalVitae.sourceCv }
@@ -30,6 +33,7 @@ export function PersonalVitaeSection({
   const cycleSummary = cycle === null
     ? cycleLabel
     : `${cycle.label} · ${cycle.departmentName}`
+  const importAvailable = onboardingNeeded || cycle !== null
 
   return (
     <section id="my-vitae" aria-labelledby="personal-vitae-title">
@@ -52,19 +56,30 @@ export function PersonalVitaeSection({
               <p className="mt-7 max-w-sm text-sm leading-6 text-slate-600 dark:text-slate-300">
                 {onboardingNeeded
                   ? 'Import your current CV to begin creating your ABET faculty vitae.'
-                  : 'CV importing is not available yet.'}
+                  : cycle === null
+                    ? 'CV importing will be available when a review cycle is current.'
+                    : 'Import your current CV to begin creating your ABET faculty vitae.'}
               </p>
               <button
                 type="button"
                 className="primary-button mt-5"
-                disabled={!onboardingNeeded}
-                onClick={onboardingNeeded ? onStartImport : undefined}
-                title={onboardingNeeded ? undefined : 'CV importing is not available yet'}
+                disabled={!importAvailable}
+                onClick={importAvailable ? onStartImport : undefined}
               >
                 Import CV
               </button>
-              {!onboardingNeeded && (
-                <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">PDF or Word document</p>
+              {cycle !== null && !onboardingNeeded && uploadState.status === 'processing' && (
+                <p className="mt-3 text-xs text-slate-500 dark:text-slate-400" role="status">
+                  {uploadState.filename} · Processing
+                </p>
+              )}
+              {cycle !== null && !onboardingNeeded && uploadState.status === 'failed' && (
+                <p className="mt-3 text-xs text-red-600 dark:text-red-300" role="alert">
+                  {uploadState.message}
+                </p>
+              )}
+              {cycle !== null && !onboardingNeeded && uploadState.status === 'idle' && (
+                <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">PDF or DOCX</p>
               )}
             </>
           )}
