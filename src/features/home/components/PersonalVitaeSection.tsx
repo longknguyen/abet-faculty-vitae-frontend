@@ -2,6 +2,7 @@ import { ArrowRight, ArrowUpRight, FileText } from 'lucide-react'
 
 import type { HomeData } from '../model/homeSchemas'
 import { DocumentPreview } from './DocumentPreview'
+import { Link } from 'react-router-dom'
 
 interface PersonalVitaeSectionProps {
   cycle: HomeData['cycle']
@@ -54,15 +55,20 @@ export function PersonalVitaeSection({
                   ? 'Import your current CV to begin creating your ABET faculty vitae.'
                   : 'CV importing is not available yet.'}
               </p>
-              <button
-                type="button"
-                className="primary-button mt-5"
-                disabled={!onboardingNeeded}
-                onClick={onboardingNeeded ? onStartImport : undefined}
-                title={onboardingNeeded ? undefined : 'CV importing is not available yet'}
-              >
-                Import CV
-              </button>
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <button
+                    type="button"
+                    className="primary-button"
+                    disabled={!onboardingNeeded}
+                    onClick={onboardingNeeded ? onStartImport : undefined}
+                    title={onboardingNeeded ? undefined : 'CV importing is not available yet'}>
+                  Import CV
+                </button>
+
+                <Link to="/build-vitae" className="text-button">
+                  Build Manually <ArrowRight aria-hidden="true" size={17} />
+                </Link>
+              </div>
               {!onboardingNeeded && (
                 <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">PDF or Word document</p>
               )}
